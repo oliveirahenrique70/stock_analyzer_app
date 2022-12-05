@@ -45,12 +45,45 @@ app_catalog_tbl <- bind_rows(app1, app2, app3, .id = "id")
 
 
 # FUNCTIONS ----
-
+navbar_page_with_inputs <- function(..., inputs) {
+    navbar <- navbarPage(...)
+    form <- tags$form(class = "navbar-form navbar-right", inputs)
+    navbar[[4]][[1]][[1]]$children[[1]]$children[[2]] <- htmltools::tagAppendChild(
+        navbar[[4]][[1]][[1]]$children[[1]]$children[[2]], form)
+    navbar
+}
 
 # UI ----
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-    "Hello Shiny"
+    
+    # Header of WebPage
+    tagList(
+        tags$head(HTML("<title>Henrique Oliveira Apps</title>"))
+    ),
+    style = "padding:0px",
+    
+    themeSelector(),
+
+    # Navbar page
+    navbar_page_with_inputs(
+        title = "Test",
+        collapsible = TRUE,
+
+        # Search box
+        inputs = div(
+            textInput(inputId = "search_box",
+                      label = NULL,
+                      width = 200),
+            actionButton(inputId = "search_button",
+                         label = "Submit"),
+            actionButton(inputId = "clear_button",
+                         label = "Clear")
+        ),
+
+        # Tabs
+        tabPanel(title = "Library")
+    )
 )
 
 # SERVER ----
