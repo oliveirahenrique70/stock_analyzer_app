@@ -26,7 +26,7 @@ app2 <- list(
     title = "Marine App",
     subtitle = "Geolocation Data Analysis",
     description = "A marine application for analyzing boat travel data on departure and arrival dates, journey distance and duration. Leverages AWS EC2 and uses internal data storage.",
-    sub_directory = "marine_analizer",
+    sub_directory = "marine_analyzer",
     tags = tibble(
         tag = c("AWS", "Leaflet", "DT"),
         color = c("primary", "danger", "warning")
