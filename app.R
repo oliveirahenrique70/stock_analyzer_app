@@ -14,7 +14,7 @@ app1 <- list(
     title = "Stock Analyzer",
     subtitle = "Financial data analysis",
     description = "A financial application for analyzing trends in your favorite SP 500 stocks. Leverages AWS EC2 and MongoDB Atlas Cloud.",
-    sub_directory = "stock_analyzer_local_data",
+    sub_directory = "stock_analyzer_mongo_atlas",
     tags = tibble(
         tag = c("AWS", "Auth", "MongoDB", "Plotly"),
         color = c("primary", "dark", "success", "info")
@@ -26,7 +26,7 @@ app2 <- list(
     title = "Marine App",
     subtitle = "Geolocation Data Analysis",
     description = "A marine application for analyzing boat travel data on departure and arrival dates, journey distance and duration. Leverages AWS EC2 and uses internal data storage.",
-    sub_directory = "stock_analyzer_local_data",
+    sub_directory = "marine_analizer",
     tags = tibble(
         tag = c("AWS", "Leaflet", "DT"),
         color = c("primary", "danger", "warning")
@@ -179,10 +179,10 @@ ui <- fluidPage(
                         h6("These Apps were created by",
                         tags$b('HO'),
                         ". Check out profile at"),
-                        "LinkedIn" %>% a(class = "btn btn-lg btn-secondary", href = "https://www.linkedin.com/in/henrique-meira-de-oliveira-4b381232/"),
-                        "Upwork" %>% a(class = "btn btn-lg btn-secondary", href = "https://www.upwork.com/freelancers/~0121d225d384034e92"),
-                        "RPubs" %>% a(class = "btn btn-lg btn-secondary", href = "https://rpubs.com/oliveirahenrique70"),
-                        "GitHub" %>% a(class = "btn btn-lg btn-secondary", href = "https://github.com/oliveirahenrique70")
+                        "LinkedIn" %>% a(target="_blank", class = "btn btn-lg btn-secondary", href = "https://www.linkedin.com/in/henrique-meira-de-oliveira-4b381232/"),
+                        "Upwork" %>% a(target="_blank", class = "btn btn-lg btn-secondary", href = "https://www.upwork.com/freelancers/~0121d225d384034e92"),
+                        "RPubs" %>% a(target="_blank", class = "btn btn-lg btn-secondary", href = "https://rpubs.com/oliveirahenrique70"),
+                        "GitHub" %>% a(target="_blank", class = "btn btn-lg btn-secondary", href = "https://github.com/oliveirahenrique70")
                         
                     ),
                     column(
