@@ -106,7 +106,7 @@ make_cards <- function(data) {
                             type = "button",
                             class = str_glue("btn btn-{button_theme_cards}"),
                             target = "_blank",
-                            href = data$sub_directory,
+                            href = str_c("/", data$sub_directory),
                             "Open",
                             style = "margin:20px;"
                         )
