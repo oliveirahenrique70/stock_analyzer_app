@@ -122,9 +122,8 @@ make_cards <- function(data) {
 # UI ----
 
 ui <- fluidPage(
-    #### Header of Web Page ####
-    useShinyjs(),
     
+    #### Header of Web Page ####
     tagList(tags$head(
         HTML("<title>Henrique Oliveira Apps</title>")
     )),
