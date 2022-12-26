@@ -286,10 +286,9 @@ server <- function(session, input, output) {
             )
             
             # Send email
-            #smtp(email)
+            smtp(email)
             
             shinyalert(title = "Message sent!", type = "success")
-            print(email)
         }
     })
     
