@@ -35,7 +35,11 @@ function(data) {
         scale_color_tq() +
         labs(y = "Adjusted Share Price", x = "")
     
-    ggplotly(g)
+    ggplotly(g, tooltip = c("date", "value")) %>%
+        layout(legend = list(title = list(text = ""),
+                             orientation = "h",
+                             x = 0.2,
+                             y = -0.2))
 }
 generate_commentary <-
 function(data, user_input) {

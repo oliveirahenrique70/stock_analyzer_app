@@ -3,6 +3,8 @@ library(shiny)
 library(shinythemes)
 library(shinyWidgets)
 library(tidyverse)
+library(emayili)
+library(shinyalert)
 
 # SET UP ----
 button_theme_search <- "secondary"
@@ -121,6 +123,8 @@ make_cards <- function(data) {
 
 ui <- fluidPage(
     #### Header of Web Page ####
+    useShinyjs(),
+    
     tagList(tags$head(
         HTML("<title>Henrique Oliveira Apps</title>")
     )),
@@ -166,7 +170,7 @@ ui <- fluidPage(
         #### Tabs ####
         tabPanel(
             div("Library",
-            style = "padding-top:9px"),
+            style = "padding-top:15px"),
             
             div(
                 class = "jumbotron",
@@ -178,12 +182,15 @@ ui <- fluidPage(
                         h1(strong("Henrique Oliveira's Apps")),
                         h6("These Apps were created by",
                         tags$b('HO'),
-                        ". Check out profile at"),
+                        ". Check out my profiles or send me a direct message"),
                         "LinkedIn" %>% a(target="_blank", class = "btn btn-lg btn-secondary", href = "https://www.linkedin.com/in/henrique-meira-de-oliveira-4b381232/"),
                         "Upwork" %>% a(target="_blank", class = "btn btn-lg btn-secondary", href = "https://www.upwork.com/freelancers/~0121d225d384034e92"),
                         "RPubs" %>% a(target="_blank", class = "btn btn-lg btn-secondary", href = "https://rpubs.com/oliveirahenrique70"),
-                        "GitHub" %>% a(target="_blank", class = "btn btn-lg btn-secondary", href = "https://github.com/oliveirahenrique70")
-                        
+                        "GitHub" %>% a(target="_blank", class = "btn btn-lg btn-secondary", href = "https://github.com/oliveirahenrique70"),
+                        actionButton(inputId = "contact_me",
+                                            class = "btn btn-lg",
+                                            style = "color: white; background-color: #9933CC; border-color: black",
+                                            label = "Contact me!"),
                     ),
                     column(
                         width = 2,
@@ -230,6 +237,62 @@ ui <- fluidPage(
 
 # SERVER ----
 server <- function(session, input, output) {
+    
+    observeEvent(input$contact_me, {
+        showModal(modalDialog(
+            tags$h3("Please share your info!"),
+            textInput("email",
+                      "Enter e-mail:",
+                      placeholder = 'Enter text here'),
+            textAreaInput(inputId = "message",
+                          label = "Enter message:",
+                          height = "200px",
+                          width = "300px"),
+            size = "s",
+            easyClose = TRUE,
+            footer = tagList(actionButton('submit_form', 'Submit'),
+                             modalButton('Cancel')
+            )
+        ))
+        
+    })
+    
+    output$output1 <- renderText({
+        input$input1
+    })
+    
+    observeEvent(input$submit_form, {
+        if (input$email == ""){
+            shinyalert(title = "Please, add your email", type = "error")
+            
+        } else {
+        
+            from <- isolate(input$email)
+            msg <- isolate(input$message)
+            
+            # Create email body
+            email <- envelope(
+                to = "oliveirahenrique70@gmail.com",
+                from = "oliveirahenrique70@gmail.com",
+                subject = str_c("HO Apps Contact - ", from),
+                text = msg
+            )
+            
+            # Create smtp server port
+            smtp <- emayili::server(
+                host = "smtp.gmail.com",
+                port = 465,
+                username = "oliveirahenrique70@gmail.com",
+                password = "mkjppkgwvnfqrzfh"
+            )
+            
+            # Send email
+            #smtp(email)
+            
+            shinyalert(title = "Message sent!", type = "success")
+            print(email)
+        }
+    })
     
     reactive_app_catalog_tbl <- reactiveValues(data = app_catalog_tbl)
     

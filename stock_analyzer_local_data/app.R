@@ -42,9 +42,25 @@ ui <- tagList(
     # User Login ----
     # verbatimTextOutput(outputId = "creds"),
     shinyauthr::loginUI(
-        id = "login", 
-        title = tagList(h2(class = "text-center", "Stock Analyzer"), 
-                        p(class = "text-center", "Please Log In")),
+        id = "login",
+        title =
+            tagList(
+                h2(class = "text-center", "Stock Analyzer"),
+                br(),
+                h6("To login use one of the following:"),
+                tags$table(colspan = 5, border = 1,
+                           tags$thead(tags$tr(tags$th(colspan = 2, width = 800, align = "center"))),
+                           tags$tbody(tags$tr(tags$td(align = "center", "User Name"),
+                                              tags$td(align = "center", "Password")),
+                                      tags$tr(tags$td(align = "center", "user1"),
+                                              tags$td(align = "center", "pass1")),
+                                      tags$tr(tags$td(align = "center", "user2"),
+                                              tags$td(align = "center", "pass2"))
+                                      )
+                           ),
+                br(),
+                h4("Please Login", class = "text-center")
+            ),
         login_title = "Enter"
     ),
     
@@ -381,9 +397,7 @@ server <- function(input, output, session) {
                 div(
                     class = "container",
                     id = "header",
-                    h1(class = "page-header", "Stock Analyzer", tags$small("by Business Science")),
-                    p(class = "lead", "This is the first mini-project completed in our", 
-                      a(href = "https://www.business-science.io/", target = "_blank", "Expert Shiny Applications Course (DS4B 202-R)"))
+                    h1(class = "page-header", "Stock Analyzer", tags$small("by Henrique Oliveira"))
                 ),
                 
                 # 5.2.0 FAVORITES ----
