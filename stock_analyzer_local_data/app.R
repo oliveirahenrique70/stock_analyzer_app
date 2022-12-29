@@ -73,6 +73,10 @@ ui <- tagList(
 # SERVER ----
 server <- function(input, output, session) {
     
+    session$onSessionEnded(function() {
+        stopApp()
+    })
+    
     
    # 0.0 READ USER BASE & AUTHENTICATE USER LOGIN ----
     
