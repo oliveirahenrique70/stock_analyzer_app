@@ -14,7 +14,7 @@ button_theme_cards <- "primary"
 # APP CATALOG (META DATA) ----
 app1 <- list(
     title = "Stock Analyzer",
-    subtitle = "Financial data analysis",
+    subtitle = "Financial Analysis",
     description = "A financial application for analyzing trends in your favorite SP 500 stocks. Leverages AWS EC2 and MongoDB Atlas Cloud.",
     sub_directory = "stock_analyzer_local_data",
     tags = tibble(
@@ -26,7 +26,7 @@ app1 <- list(
 
 app2 <- list(
     title = "Marine",
-    subtitle = "Geolocation Data Analysis",
+    subtitle = "Geolocation Analysis",
     description = "A marine application for analyzing boat travel data on departure and arrival dates, journey distance and duration. Leverages AWS EC2 and uses internal data storage.",
     sub_directory = "marine_analyzer",
     tags = tibble(
