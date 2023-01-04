@@ -44,6 +44,8 @@ ui <- fluidPage(
     # First row 
     fluidRow(
         
+        tags$style(HTML("div.row {background-color: #000000;}")),
+        
         # Add image
         column(tags$img(src="HO.gif", height=80, width=110), 
                width = 1,
