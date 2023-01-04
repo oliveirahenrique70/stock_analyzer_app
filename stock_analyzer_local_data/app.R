@@ -137,11 +137,11 @@ server <- function(input, output, session) {
     
     # 1.2 Stock Symbol ----
     observeEvent(input$analyze, {
-        update_and_write_user_base(
-            user_name    = credentials()$info$user,
-            column_name  = "last_symbol", 
-            assign_input = get_symbol_from_user_input(input$stock_selection)
-        )
+        # update_and_write_user_base(
+        #     user_name    = credentials()$info$user,
+        #     column_name  = "last_symbol", 
+        #     assign_input = get_symbol_from_user_input(input$stock_selection)
+        # )
     })
     
     stock_symbol <- eventReactive(input$analyze, {
@@ -162,11 +162,11 @@ server <- function(input, output, session) {
             time_window = input$time_window
         )
         
-        update_and_write_user_base(
-            user_name    = credentials()$info$user, 
-            column_name  = "user_settings",
-            assign_input = list(user_settings_tbl)
-        )
+        # update_and_write_user_base(
+        #     user_name    = credentials()$info$user, 
+        #     column_name  = "user_settings",
+        #     assign_input = list(user_settings_tbl)
+        # )
     })
     
     mavg_short <- eventReactive(input$apply_and_save, {
@@ -223,11 +223,11 @@ server <- function(input, output, session) {
             
             updateTabsetPanel(session = session, inputId = "tab_panel_stock_chart", selected = new_symbol)
             
-            update_and_write_user_base(
-                user_name = credentials()$info$user,
-                column_name = "favorites",
-                assign_input = list(reactive_values$favorites_list)
-            )
+            # update_and_write_user_base(
+            #     user_name = credentials()$info$user,
+            #     column_name = "favorites",
+            #     assign_input = list(reactive_values$favorites_list)
+            # )
         }
         
     })
@@ -282,11 +282,11 @@ server <- function(input, output, session) {
                           inputId = "drop_list", 
                           choices = reactive_values$favorites_list %>% sort())
         
-        update_and_write_user_base(
-            user_name    = credentials()$info$user,
-            column_name  = "favorites",
-            assign_input = list(reactive_values$favorites_list)
-        )
+        # update_and_write_user_base(
+        #     user_name    = credentials()$info$user,
+        #     column_name  = "favorites",
+        #     assign_input = list(reactive_values$favorites_list)
+        # )
     })
     
     # 2.4.2 Clear All ----
@@ -298,11 +298,11 @@ server <- function(input, output, session) {
                           inputId = "drop_list", 
                           choices = reactive_values$favorites_list %>% sort())
         
-        update_and_write_user_base(
-            user_name    = credentials()$info$user,
-            column_name  = "favorites",
-            assign_input = list(reactive_values$favorites_list)
-        )
+        # update_and_write_user_base(
+        #     user_name    = credentials()$info$user,
+        #     column_name  = "favorites",
+        #     assign_input = list(reactive_values$favorites_list)
+        # )
     })
     
     # 2.5 Show/Hide Favorites ----
