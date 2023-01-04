@@ -25,7 +25,7 @@ app1 <- list(
 )
 
 app2 <- list(
-    title = "Marine App",
+    title = "Marine",
     subtitle = "Geolocation Data Analysis",
     description = "A marine application for analyzing boat travel data on departure and arrival dates, journey distance and duration. Leverages AWS EC2 and uses internal data storage.",
     sub_directory = "marine_analyzer",
@@ -131,9 +131,9 @@ ui <- fluidPage(
     # Navbar header size
     tags$style(
         HTML(
-            '.navbar-nav > li > a, .navbar-brand {
+            ".navbar-nav > li > a, .navbar-brand {
                    padding-top: 5px;
-                   height: 50px;}'
+                   height: 50px;}"
         )
     ),
     
@@ -170,9 +170,8 @@ ui <- fluidPage(
         tabPanel(
             div("Library",
             style = "padding-top:15px"),
-            
-            div(
-                class = "jumbotron",
+
+            div(class = "jumbotron",
                 div(
                     class = "container",
                     style = "background-color:black;",
