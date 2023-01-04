@@ -38,22 +38,22 @@ ui <- tagList(
     
     # JS ----
     shinyjs::useShinyjs(),
-    
+
     # User Login ----
     # verbatimTextOutput(outputId = "creds"),
     shinyauthr::loginUI(
         id = "login",
         title =
             tagList(
+                tags$style(HTML("div.well {background-color: #000000;}")),
+                img(src = "HO.gif", width = 100),
                 h2(class = "text-center", "Stock Analyzer"),
                 br(),
-                h6("To login use one of the following:"),
+                h6("To login use the following:"),
                 tags$table(colspan = 5, border = 1,
                            tags$thead(tags$tr(tags$th(colspan = 2, width = 800, align = "center"))),
                            tags$tbody(tags$tr(tags$td(align = "center", "User Name"),
                                               tags$td(align = "center", "Password")),
-                                      tags$tr(tags$td(align = "center", "user1"),
-                                              tags$td(align = "center", "pass1")),
                                       tags$tr(tags$td(align = "center", "user2"),
                                               tags$td(align = "center", "pass2"))
                                       )
@@ -402,7 +402,7 @@ server <- function(input, output, session) {
                 div(
                     class = "container",
                     id = "header",
-                    h1(class = "page-header", "Stock Analyzer", tags$small("by Henrique Oliveira"))
+                    h1(class = "page-header", "Stock Analyzer App", tags$small("created by Henrique Oliveira"))
                 ),
                 
                 # 5.2.0 FAVORITES ----
