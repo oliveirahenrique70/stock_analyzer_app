@@ -16,7 +16,7 @@ app1 <- list(
     title = "Stock Analyzer",
     subtitle = "Financial data analysis",
     description = "A financial application for analyzing trends in your favorite SP 500 stocks. Leverages AWS EC2 and MongoDB Atlas Cloud.",
-    sub_directory = "stock_analyzer_local_data",
+    sub_directory = "stock_analyzer_mongo_atlas",
     tags = tibble(
         tag = c("AWS", "Auth", "API", "Plotly"),
         color = c("primary", "dark", "success", "info")
