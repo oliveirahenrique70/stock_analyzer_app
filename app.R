@@ -125,7 +125,7 @@ ui <- fluidPage(
     
     #### Header of Web Page ####
     tagList(tags$head(
-        HTML("<title>Henrique Oliveira Apps</title>")
+        HTML("<title>HO Apps</title>")
     )),
     
     # Navbar header size
