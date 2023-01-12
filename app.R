@@ -15,7 +15,7 @@ button_theme_cards <- "primary"
 app1 <- list(
     title = "Electricity Generation Analyzer",
     subtitle = "Energy Data Analysis",
-    description = "An energy data application for analyzing countries' electricity generation during the last years.",
+    description = "An energy data application for analyzing countries' electricity generation during the last few years.",
     sub_directory = "eletricity_generation_analyzer",
     tags = tibble(
         tag = c("AWS", "plotly", "bslib", "shinydashboard"),
