@@ -39,7 +39,7 @@ app2 <- list(
 app3 <- list(
     title = "Marine Journey Analyzer",
     subtitle = "Geolocation Analysis",
-    description = "A marine application for analyzing boat travel data on departure and arrival, journey distance and duration.",
+    description = "A marine application for analyzing boat journey date, distance and duration.",
     sub_directory = "marine_analyzer",
     tags = tibble(
         tag = c("AWS", "leaflet", "DT", "shinydashboard"),
