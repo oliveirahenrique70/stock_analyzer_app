@@ -21,7 +21,7 @@ ui <- fluidPage(
 
   # Application title
   titlePanel(h1("", align = 'center'),
-            windowTitle = "Countries Eletricity Generation App"),
+            windowTitle = "Countries Electricity Generation App"),
   
   # Header
   fluidRow(
@@ -33,7 +33,7 @@ ui <- fluidPage(
            width = 1),
     
     # App title
-    column(h1(HTML("Countries Eletricity Generation")),
+    column(h1(HTML("Countries Electricity Generation")),
            align = 'center',
            width = 8,
            offset = 1)
@@ -42,7 +42,7 @@ ui <- fluidPage(
   # Intro
   fluidRow(
     tags$style(HTML("div.row {background-color: #000000;}")),
-    p(h6("This app performs the data anlysis of the countries with highest eletricity generation (in TWh) in the last years",
+    p(h6("This app performs the data anlysis of the countries with highest electricity generation (in TWh) in the last years",
          align = 'center'),
       h6("Data source: https://ourworldindata.org/grapher/electricity-generation",
          align = 'center'))
@@ -104,7 +104,7 @@ ui <- fluidPage(
       card(
         height = 400,
         full_screen = TRUE,
-        card_header("Countries Eletricity Generation in TWh"),
+        card_header("Countries Electricity Generation in TWh"),
         card_body_fill(plotlyOutput("world_plot",
                                     height = "550px"))
       ),
@@ -113,7 +113,7 @@ ui <- fluidPage(
       card(
         height = 400,
         full_screen = TRUE,
-        card_header("Top 5 Countries Eletricity Generation in TWh"),
+        card_header("Top 5 Countries Electricity Generation in TWh"),
         card_body_fill(plotlyOutput("top_countries",
                                     height = "550px"))
       ),
@@ -191,7 +191,7 @@ server <- function(input, output, session) {
   
   #### Value Boxes ####
   
-  # Total eletricity generation
+  # Total electricity generation
   output$total_consumption <- renderValueBox({
       valueBox(
         formatC(
@@ -200,13 +200,13 @@ server <- function(input, output, session) {
           big.mark = ",",
           digits = 0
         ),
-        "Countries Total Eletricity Generation in TWh",
+        "Countries Total Electricity Generation in TWh",
         icon = icon("flash", lib = "glyphicon"),
         color = "yellow"
         )
     })
   
-  # Top 5 eletricity generation
+  # Top 5 Electricity generation
   output$max_consumption <- renderValueBox({
       top_consumption <- world_df() %>%
         filter(COUNTRY %in% top_countries())
@@ -218,7 +218,7 @@ server <- function(input, output, session) {
           big.mark = ",",
           digits = 0
         ),
-        "Top 5 Contries Total Eletricity Generation in TWh",
+        "Top 5 Contries Total Electricity Generation in TWh",
         icon = icon("stats", lib = "glyphicon"),
         color = "blue"
         )
