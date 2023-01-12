@@ -42,7 +42,7 @@ ui <- fluidPage(
   # Intro
   fluidRow(
     tags$style(HTML("div.row {background-color: #000000;}")),
-    p(h6("This app performs the data anlysis of the countries with highest electricity generation (in TWh) in the last years",
+    p(h6("This app performs the data analysis of the countries with the highest electricity generation (in TWh) in the last years",
          align = 'center'),
       h6("Data source: https://ourworldindata.org/grapher/electricity-generation",
          align = 'center'))

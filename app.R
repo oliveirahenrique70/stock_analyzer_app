@@ -15,7 +15,7 @@ button_theme_cards <- "primary"
 app1 <- list(
     title = "Electricity Generation Analyzer",
     subtitle = "Energy Data Analysis",
-    description = "A energy data application for analyzing countries electricity generation during the last years.",
+    description = "An energy data application for analyzing countries' electricity generation during the last years.",
     sub_directory = "eletricity_generation_analyzer",
     tags = tibble(
         tag = c("AWS", "plotly", "bslib", "shinydashboard"),
@@ -27,7 +27,7 @@ app1 <- list(
 app2 <- list(
     title = "Stock Analyzer",
     subtitle = "Financial Analysis",
-    description = "A financial application for analyzing trends in your favorite SP 500 stocks.",
+    description = "A financial application for analyzing trends in your favourite SP 500 stocks.",
     sub_directory = "stock_analyzer_local_data",
     tags = tibble(
         tag = c("AWS", "auth", "API", "plotly"),
