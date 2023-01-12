@@ -13,42 +13,54 @@ button_theme_cards <- "primary"
 
 # APP CATALOG (META DATA) ----
 app1 <- list(
+    title = "Eletricity Generation Analyzer",
+    subtitle = "Energy Data Analysis",
+    description = "A energy data application for analyzing countries eletricity generation during the last years.",
+    sub_directory = "eletricity_generation_analyzer",
+    tags = tibble(
+        tag = c("AWS", "plotly", "bslib", "shinydashboard"),
+        color = c("primary", "info", "success", "secondary")
+    ) %>% list(),
+    img = "energy_analyzer.jpg"
+)
+
+app2 <- list(
     title = "Stock Analyzer",
     subtitle = "Financial Analysis",
-    description = "A financial application for analyzing trends in your favorite SP 500 stocks. Leverages AWS EC2 and MongoDB Atlas Cloud.",
+    description = "A financial application for analyzing trends in your favorite SP 500 stocks.",
     sub_directory = "stock_analyzer_local_data",
     tags = tibble(
-        tag = c("AWS", "Auth", "API", "Plotly"),
+        tag = c("AWS", "auth", "API", "plotly"),
         color = c("primary", "dark", "success", "info")
     ) %>% list(),
     img = "stock_analyzer.jpg"
 )
 
-app2 <- list(
-    title = "Marine",
+app3 <- list(
+    title = "Marine Journey Analyzer",
     subtitle = "Geolocation Analysis",
-    description = "A marine application for analyzing boat travel data on departure and arrival dates, journey distance and duration. Leverages AWS EC2 and uses internal data storage.",
+    description = "A marine application for analyzing boat travel data on departure and arrival, journey distance and duration.",
     sub_directory = "marine_analyzer",
     tags = tibble(
-        tag = c("AWS", "Leaflet", "DT"),
-        color = c("primary", "danger", "warning")
+        tag = c("AWS", "leaflet", "DT", "shinydashboard"),
+        color = c("primary", "danger", "warning", "secondary")
     ) %>% list(),
     img = "marine_app.jpg"
 )
 
-app3 <- list(
-    title = "Old Faithful",
-    subtitle = NA,
+app4 <- list(
+    title = "Old Faithful Analyzer",
+    subtitle = "Test Data Analysis",
     description = "A test application used to validate Shiny Server.",
     sub_directory = "test_app",
     tags = tibble(
-        tag = c("AWS", "Plotly"),
+        tag = c("AWS", "plotly"),
         color = c("primary", "info")
     ) %>% list(),
     img = "test_app.jpg"
 )
 
-app_catalog_tbl <- bind_rows(app1, app2, app3, .id = "id")
+app_catalog_tbl <- bind_rows(app1, app2, app3, app4, .id = "id")
 
 
 # FUNCTIONS ----
@@ -212,7 +224,7 @@ ui <- fluidPage(
                 
                 radioGroupButtons(
                     inputId = "input_tags", 
-                    choices = c("All", app_catalog_tbl %>%
+                    choices = c("all", app_catalog_tbl %>%
                                     select(tags) %>%
                                     unnest() %>%
                                     pull(tag) %>%
