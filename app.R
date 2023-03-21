@@ -30,10 +30,10 @@ app2 <- list(
     description = "A financial application for analyzing trends in your favourite SP 500 stocks.",
     sub_directory = "stock_analyzer_local_data",
     tags = tibble(
-        tag = c("AWS", "auth", "API", "plotly"),
-        color = c("primary", "dark", "success", "info")
+        tag = c("AWS", "API", "plotly"),
+        color = c("primary", "success", "info")
     ) %>% list(),
-    img = "stock_analyzer.jpg"
+    img = "stock_analyzer.png"
 )
 
 app3 <- list(
