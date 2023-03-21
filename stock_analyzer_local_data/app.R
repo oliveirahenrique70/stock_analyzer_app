@@ -1,519 +1,431 @@
-# BUSINESS SCIENCE ----
-# DS4B 202-R ----
-# STOCK ANALYZER APP - PERSISTENT DATA -----
-# Version 1
+# PACKAGES ----
 
-# APPLICATION DESCRIPTION ----
-# - Perform CRUD Operations
-# - Use local data storage via RDS File
-
-
-# LIBRARIES ----
+library(tidyverse)
+library(mongolite)
+library(jsonlite)
+library(config)
 library(shiny)
-library(shinyWidgets)
+library(plotly)
 library(shinythemes)
 library(shinyjs)
-library(shinyauthr)  # devtools::install_github("business-science/shinyauthr")
-
-library(plotly)
+library(shinyWidgets)
 library(tidyquant)
-library(tidyverse)
 
-source(file = "00_scripts/stock_analysis_functions.R")
-source(file = "00_scripts/info_card.R")
-source(file = "00_scripts/panel_card.R")
-source(file = "00_scripts/generate_favorite_cards.R")
-source(file = "00_scripts/crud_operations_local.R")
+# FUNCTIONS AND DATA ----
+
+source(file = "stock_analysis_functions.R")
 
 stock_list_tbl <- get_stock_list("SP500")
 
-# UI ----
-ui <- tagList(
-    
-    # CSS ----
-    tags$head(
-        tags$link(rel = "stylesheet", type = "text/css", href = shinytheme("cyborg")),
-        tags$link(rel = "stylesheet", type = "text/css", href = "styles.css")
-    ),
-    
-    # JS ----
-    shinyjs::useShinyjs(),
+user_base_tbl <- tibble(
+    user = c("user1", "user2"),
+    password = c("pass1", "pass2"),
+    permissions = c("admin", "standard"),
+    name = c("User One", "User Two"),
+    favorites = list(c("AAPL", "GOOG", "NFLX"), c("TWTR")),
+    last_symbol = c("NFLX", "TWTR"),
+    user_settings = list(tibble(mavg_short = 20, mavg_long = 50, time_window = 180),
+                         tibble(mavg_short = 30, mavg_long = 70, time_window = 365))
+)
 
-    # User Login ----
-    # verbatimTextOutput(outputId = "creds"),
-    shinyauthr::loginUI(
-        id = "login",
-        title =
-            tagList(
-                tags$style(HTML("div.well {background-color: #000000;}")),
-                img(src = "HO.gif", width = 100),
-                h2(class = "text-center", "Stock Analyzer"),
-                br(),
-                h6("To login use the following:"),
-                tags$table(colspan = 5, border = 1,
-                           tags$thead(tags$tr(tags$th(colspan = 2, width = 800, align = "center"))),
-                           tags$tbody(tags$tr(tags$td(align = "center", "User Name"),
-                                              tags$td(align = "center", "Password")),
-                                      tags$tr(tags$td(align = "center", "user2"),
-                                              tags$td(align = "center", "pass2"))
-                                      )
-                           ),
-                br(),
-                h4("Please Login", class = "text-center")
-            ),
-        login_title = "Enter"
+# UI ----
+
+ui <- tagList(
+    # CSS
+    tags$head(
+        tags$link(
+            rel = "stylesheet",
+            type = "text/css",
+            href = shinytheme("paper")
+        )
     ),
+    
+    # JS
+    useShinyjs(),
     
     # Website ----
     uiOutput(outputId = "website")
-) 
-    
-    
+)
 
-
-# SERVER ----
 server <- function(input, output, session) {
-    
-    session$onSessionEnded(function() {
-        stopApp()
-    })
-    
-    
-   # 0.0 READ USER BASE & AUTHENTICATE USER LOGIN ----
-    
-    # 0.1 Return user_base_tbl - To Global Environment -----
-    read_user_base()
-    
-    # 0.2 Credentials ----
-    credentials <- callModule(
-        module = shinyauthr::login,
-        id       = "login",
-        data     = user_base_tbl,
-        user_col = user,
-        pwd_col  = password,
-        log_out  = reactive(logout_init())
-    )
-    
-    logout_init <- callModule(
-        module = shinyauthr::logout,
-        id     = "logout",
-        active = reactive(credentials()$user_auth)
-    )
-    
-    # 0.3 Instantiating User Information ----
+    # USER LOGIN ----
+
+    # User information ----
     reactive_values <- reactiveValues()
     
     observe({
-        if (credentials()$user_auth) {
-            
-            user_data_tbl <- credentials()$info
-            
-            reactive_values$permissions    <- user_data_tbl$permissions 
-            reactive_values$user_name      <- user_data_tbl$name
-            reactive_values$favorites_list <- user_data_tbl %>% pull(favorites) %>% pluck(1)
-            reactive_values$last_symbol    <- user_data_tbl$last_symbol
-            reactive_values$user_settings  <- user_data_tbl$user_settings
-        }
+        #if (credentials()$user_auth) {
+        user_data_tbl <- user_base_tbl
+        
+        reactive_values$user_name <- user_data_tbl$name
+        reactive_values$permissions <- user_data_tbl$permissions
+        reactive_values$favorites_list <-
+            user_data_tbl %>% pull(favorites) %>% pluck(1)
+        reactive_values$last_symbol <- user_data_tbl$last_symbol
+        reactive_values$user_settings <-
+            user_data_tbl %>% pull(user_settings) %>% pluck(1)
+        
+        #}
     })
     
-    output$creds <- renderPrint({
-        list(
-            credentials(),
-            reactive_values$permissions,
-            reactive_values$user_name,
-            reactive_values$favorites_list,
-            reactive_values$last_symbol,
-            reactive_values$user_settings
+    # Moving averages and time window
+    observeEvent(input$apply_and_save, {
+        user_settings_tbl <- tibble(
+            mavg_short = input$mavg_short,
+            mavg_long = input$mavg_long,
+            time_window = input$time_window
         )
     })
     
-    
-    # 1.0 SETTINGS ----
-    
-    # 1.1 Toggle Input Settings ----
+    # Toggle Input Settings ----
     observeEvent(input$settings_toggle, {
         toggle(id = "input_settings", anim = TRUE)
     })
     
-    # 1.2 Stock Symbol ----
-    observeEvent(input$analyze, {
-        # update_and_write_user_base(
-        #     user_name    = credentials()$info$user,
-        #     column_name  = "last_symbol", 
-        #     assign_input = get_symbol_from_user_input(input$stock_selection)
-        # )
-    })
-    
+    # Stock Symbol ----
     stock_symbol <- eventReactive(input$analyze, {
         get_symbol_from_user_input(input$stock_selection)
     }, ignoreNULL = FALSE)
     
-    # 1.3 User Input ----
+    # User Input ----
     stock_selection_triggered <- eventReactive(input$analyze, {
         input$stock_selection
     }, ignoreNULL = FALSE)
     
-    # 1.4 Apply & Save Settings ----
-    observeEvent(input$apply_and_save, {
-        
-        user_settings_tbl <- tibble(
-            mavg_short  = input$mavg_short,
-            mavg_long   = input$mavg_long,
-            time_window = input$time_window
-        )
-        
-        # update_and_write_user_base(
-        #     user_name    = credentials()$info$user, 
-        #     column_name  = "user_settings",
-        #     assign_input = list(user_settings_tbl)
-        # )
-    })
-    
+    # Apply Moving Averages ----
     mavg_short <- eventReactive(input$apply_and_save, {
         input$mavg_short
-    }, ignoreNULL = FALSE)
+    },
+    ignoreNULL = FALSE)
     
     mavg_long <- eventReactive(input$apply_and_save, {
         input$mavg_long
-    }, ignoreNULL = FALSE)
+    },
+    ignoreNULL = FALSE)
     
+    # Apply Time Window ----
     time_window <- eventReactive(input$apply_and_save, {
         input$time_window
-    }, ignoreNULL = FALSE)
+    },
+    ignoreNULL = FALSE)
     
     selected_tab <- eventReactive(input$apply_and_save, {
-        if (is.character(input$tab_panel_stock_chart)) {
-            # Tab already selected
-            selected_tab <- input$tab_panel_stock_chart
+        # Set Selected Tab
+        if (is.character(input$stock_plot_tabset_panel)) {
+            selected_tab <- input$stock_plot_tabset_panel
         } else {
-            # Tab panel not built yet
-            selected_tab <- NULL
+            selected_tab <- "Last Analysis"
         }
-        
-        selected_tab
-        
-    }, ignoreNULL = FALSE)
-
-    # 1.5 Get Stock Data ----
+    },
+    ignoreNULL = FALSE)
+    
+    # Get Stock Data ----
     stock_data_tbl <- reactive({
-        stock_symbol() %>% 
+        stock_symbol() %>%
             get_stock_data(
-                from = today() - time_window(), 
+                from = today() - time_window(),
                 to   = today(),
                 mavg_short = mavg_short(),
-                mavg_long  = mavg_long())
+                mavg_long  = mavg_long()
+            )
     })
     
+    # PLOT OUTPUT ----
     
+    # Plot Header ----
+    output$plot_header <- renderText({
+        stock_selection_triggered()
+    })
     
-    # 2.0 FAVORITE CARDS ----
+    # Plotly Plot ----
+    output$plotly_plot <- renderPlotly({
+        stock_data_tbl() %>% plot_stock_data()
+    })
     
-    # 2.1 Reactive Values - User Favorites ----
+    # FAVORITES CARDS ----
     
-    
-    # 2.2 Add Favorites ----
+    # Add Favorites Cards ----
     observeEvent(input$favorites_add, {
+        new_stock_symbol <-
+            get_symbol_from_user_input(input$stock_selection)
         
-        new_symbol <- get_symbol_from_user_input(input$stock_selection)
-        new_symbol_already_in_favorites <- new_symbol %in% reactive_values$favorites_list
+        new_stock_symbol_in_favorites <-
+            new_stock_symbol %in% reactive_values$favorites_list
         
-        if (!new_symbol_already_in_favorites) {
+        if (!new_stock_symbol_in_favorites) {
+            reactive_values$favorites_list <-
+                c(reactive_values$favorites_list, new_stock_symbol) %>% unique()
             
-            reactive_values$favorites_list <- c(reactive_values$favorites_list, new_symbol) %>% unique()
-            
-            updateTabsetPanel(session = session, inputId = "tab_panel_stock_chart", selected = new_symbol)
-            
-            # update_and_write_user_base(
-            #     user_name = credentials()$info$user,
-            #     column_name = "favorites",
-            #     assign_input = list(reactive_values$favorites_list)
-            # )
+            updateTabsetPanel(session = session,
+                              inputId = "stock_plot_tabset_panel",
+                              selected = new_stock_symbol)
         }
-        
     })
     
-    # 2.3 Render Favorite Cards ----
+    # Render Favorites Cards ----
     output$favorite_cards <- renderUI({
-        
         if (length(reactive_values$favorites_list) > 0) {
             generate_favorite_cards(
-                favorites  = reactive_values$favorites_list,
-                from       = today() - time_window(),
-                to         = today(),
+                favorites = reactive_values$favorites_list,
+                from = today() - time_window(),
+                to   = today(),
                 mavg_short = mavg_short(),
                 mavg_long  = mavg_long()
             )
         }
-        
     })
     
-    # 2.4 Delete Favorites ----
+    # Delete Favorites Cards ----
     observeEvent(input$favorites_clear, {
         modalDialog(
             title = "Clear Favorites",
             size = "m",
             easyClose = TRUE,
-            
-            p("Are you sure you want to remove favorites?"),
+            footer = modalButton("Exit"),
+            p(h6(
+                "Are you sure you want to delete favorites cards?"
+            )),
             br(),
             div(
-                selectInput(inputId = "drop_list",
-                            label   = "Remove Single Favorite",
-                            choices = reactive_values$favorites_list %>% sort()),
-                actionButton(inputId = "remove_single_favorite", 
-                             label   = "Clear Single", 
-                             class   = "btn-warning"),
-                actionButton(inputId = "remove_all_favorites", 
-                             label   = "Clear ALL Favorites", 
-                             class   = "btn-danger")
-            ),
-            
-            footer = modalButton("Exit")
-        ) %>% showModal()
+                selectInput(
+                    inputId = "drop_list",
+                    label = "Remove Single Favorite",
+                    choices = reactive_values$favorites_list %>% sort()
+                ),
+                actionButton(
+                    inputId = "remove_single_favorite",
+                    label = "Clear Single",
+                    class = "btn-warning"
+                ),
+                actionButton(
+                    inputId = "remove_all_favorite",
+                    label = "Clear All Favorites",
+                    class = "btn-danger"
+                )
+            )
+        ) %>%
+            showModal()
     })
     
-    # 2.4.1 Clear Single ----
+    # Clear Single Favorites Cards ----
     observeEvent(input$remove_single_favorite, {
-        
         reactive_values$favorites_list <- reactive_values$favorites_list %>%
             .[reactive_values$favorites_list != input$drop_list]
         
-        updateSelectInput(session = session, 
-                          inputId = "drop_list", 
-                          choices = reactive_values$favorites_list %>% sort())
-        
-        # update_and_write_user_base(
-        #     user_name    = credentials()$info$user,
-        #     column_name  = "favorites",
-        #     assign_input = list(reactive_values$favorites_list)
-        # )
+        updateSelectInput(
+            session = session,
+            inputId = "drop_list",
+            choices = reactive_values$favorites_list %>% sort()
+        )
     })
     
-    # 2.4.2 Clear All ----
-    observeEvent(input$remove_all_favorites, {
+    # Clear All Favorites Cards ----
+    observeEvent(input$remove_all_favorite, {
+        reactive_values$favorites_list <- vector()
         
-        reactive_values$favorites_list <- NULL
-        
-        updateSelectInput(session = session, 
-                          inputId = "drop_list", 
-                          choices = reactive_values$favorites_list %>% sort())
-        
-        # update_and_write_user_base(
-        #     user_name    = credentials()$info$user,
-        #     column_name  = "favorites",
-        #     assign_input = list(reactive_values$favorites_list)
-        # )
+        updateSelectInput(
+            session = session,
+            inputId = "drop_list",
+            choices = reactive_values$favorites_list
+        )
     })
     
-    # 2.5 Show/Hide Favorites ----
+    # Show/Hide Favorites Cards ----
     observeEvent(input$favorites_toggle, {
-        shinyjs::toggle(id = "favorite_card_section", anim = TRUE, animType = "slide")
+        toggle(id = "cards",
+               anim = TRUE)
+        toggle(id = "commentary_text",
+               anim = TRUE)
     })
     
-    # 3.0 FAVORITE PLOT ----
     
-    # 3.1 Plot Header ----
-    output$plot_header <- renderText({
-        stock_selection_triggered()
-    })
+    # TABS PANEL ----
     
-    # 3.2 Plotly Plot ----
-    output$plotly_plot <- renderPlotly({
-        stock_data_tbl() %>% plot_stock_data()
-    })
-    
-    # 3.3 Favorite Plots ----
-    
-    output$stock_charts <- renderUI({
-        
-        # First Tab Panel
-        tab_panel_1 <- tabPanel(
-            title = "Last Analysis",
-            panel_card(
-                title = stock_symbol(),
-                plotlyOutput(outputId = "plotly_plot")
-            )
+    output$stock_plot <- renderUI({
+        #  Last Analysis Tab ----
+        tab_last_analysis <- tabPanel(title = "Last Analysis",
+                                      tab_panel(
+                                          title = stock_symbol(),
+                                          panel_body = plotlyOutput(outputId = "plotly_plot")
+                                      ),
         )
         
-        # Favorite Panels
-        favorite_tab_panels <- NULL
+        # Favorites Cards Tab ----
+        tab_favorites_cards <- NULL
+        
         if (length(reactive_values$favorites_list) > 0) {
-            
-            favorite_tab_panels <- reactive_values$favorites_list %>%
-                map(.f = function(x) {
-                    tabPanel(
-                        title = x,
-                        panel_card(
+            tab_favorites_cards <- reactive_values$favorites_list %>%
+                map(
+                    .f = function(x) {
+                        tabPanel(
                             title = x,
-                            x %>%
-                                get_stock_data(
-                                    from = today() - time_window(), 
-                                    to   = today(),
-                                    mavg_short = mavg_short(),
-                                    mavg_long  = mavg_long()
-                                ) %>%
-                                plot_stock_data()
+                            tab_panel(
+                                title = x,
+                                panel_body =  x %>%
+                                    get_stock_data(
+                                        from = today() - time_window(),
+                                        to   = today(),
+                                        mavg_short = mavg_short(),
+                                        mavg_long  = mavg_long()
+                                    ) %>%
+                                    plot_stock_data()
+                            )
                         )
-                    )
-                })
-            
+                    }
+                )
         }
         
-        # Building the Tabset Panel
+        # Create Tabs Set Panel ----
         do.call(
-            what = tabsetPanel,
-            args = list(tab_panel_1) %>%
-                append(favorite_tab_panels) %>%
-                append(list(id = "tab_panel_stock_chart", type = "pills", selected = selected_tab() ))
+            tabsetPanel,
+            list(tab_last_analysis) %>%
+                append(tab_favorites_cards) %>%
+                append(
+                    list(
+                        id = "stock_plot_tabset_panel",
+                        type = "tabs",
+                        selected = selected_tab()
+                    )
+                )
         )
-        
     })
     
-    # 4.0 COMMENTARY ----
+    # COMMENTARY SERVER ----
     
-    # 4.1 Generate Commentary ----
     output$analyst_commentary <- renderText({
         generate_commentary(data = stock_data_tbl(), user_input = stock_selection_triggered())
     })
     
-    # 5.0 RENDER WEBSITE ----
+    # RENDER WEBSITE ----
     
     output$website <- renderUI({
-        
-        req(credentials()$user_auth, reactive_values$last_symbol)
+        #req(credentials()$user_auth, reactive_values$last_symbol)
         
         navbarPage(
-            title = "Stock Analyzer",
-            inverse = FALSE,
             collapsible = TRUE,
-            
+            title = p("Stock Analyzer App"),
             theme = shinytheme("cyborg"),
             
-            header = div(
-                class = "pull-right",
-                style = "padding-right: 20px;",
-                p("Welcome, ", reactive_values$user_name)
+            
+            # APPLICATION UI -----
+            fluidRow(
+                column(
+                    width = 12,
+                    h2(class = "pull-left", "App UI")
+                )
             ),
             
-            tabPanel(
-                title = "Analysis",
+            fluidRow(
                 
-                # 5.1.0 HEADER ----
-                div(
-                    class = "container",
-                    id = "header",
-                    h1(class = "page-header", "Stock Analyzer App", tags$small("created by Henrique Oliveira"))
-                ),
+                # Plot Input ----
+                column(width = 4,
+                       wellPanel(
+                           div(
+                               id = "input-main",
+                               pickerInput(
+                                   inputId = "stock_selection",
+                                   label = "Stock List (Pick One to Analyze)",
+                                   choices = stock_list_tbl$label,
+                                   multiple = FALSE,
+                                   selected = stock_list_tbl %>% filter(label %>% str_detect(
+                                       pattern = str_c(reactive_values$last_symbol, ",")
+                                   )) %>% pull(label),
+                                   options = pickerOptions(
+                                       actionsBox = FALSE,
+                                       liveSearch = TRUE,
+                                       size = 10
+                                   )
+                               )
+                           ),
+                           div(
+                               id = "input_buttons",
+                               actionButton(
+                                   inputId = "analyze",
+                                   label = "Analyze",
+                                   icon = icon("download")
+                               ),
+                               div(
+                                   class = "pull-right",
+                                   actionButton(
+                                       inputId = "favorites_add",
+                                       label = NULL,
+                                       icon = icon("heart")
+                                   ),
+                                   actionButton(
+                                       inputId = "settings_toggle",
+                                       label = NULL,
+                                       icon = icon("cog")
+                                   )
+                               )
+                           ),
+                           div(
+                               id = "input_settings",
+                               hr(),
+                               sliderInput(
+                                   inputId = "mavg_short",
+                                   label = "Short Moving Average (Days)",
+                                   value = reactive_values$user_settings %>% pull(mavg_short),
+                                   min = 5,
+                                   max = 40
+                               ),
+                               sliderInput(
+                                   inputId = "mavg_long",
+                                   label = "Long Moving Average (Days)",
+                                   value = reactive_values$user_settings %>% pull(mavg_long),
+                                   min = 50,
+                                   max = 120
+                               ),
+                               sliderInput(
+                                   inputId = "time_window",
+                                   label = "Time Window (Days)",
+                                   value = reactive_values$user_settings %>% pull(time_window),
+                                   min = 180,
+                                   max = 730
+                               ),
+                               actionButton(
+                                   inputId = "apply_and_save",
+                                   label = "Apply and Save",
+                                   icon = icon("save")
+                               )
+                           ) %>% hidden()
+                       )),
                 
-                # 5.2.0 FAVORITES ----
-                div(
-                    class = "container hidden-sm hidden-xs",
-                    id = "favorite_container",
-                    # 5.2.1 USER INPUTS ----
-                    div(
-                        class = "",
-                        column(
-                            width = 12,
-                            h5(class = "pull-left", "Favorites"),
-                            actionButton(inputId = "favorites_clear", "Clear Favorites", class = "pull-right"),
-                            actionButton(inputId = "favorites_toggle", "Show/Hide", class = "pull-right")
-                        )
-                    ),
-                    # 5.2.2 FAVORITE CARDS ----
-                    div(
-                        class = "row",
-                        id = "favorite_card_section",
-                        uiOutput(outputId = "favorite_cards", class = "container")
-                    )
-                ),
-                
-                # 5.3.0 APPLICATION UI -----
-                div(
-                    class = "container",
-                    id = "application_ui",
-                    
-                    # 5.3.1 USER INPUTS ----
-                    column(
-                        width = 4, 
-                        wellPanel(
-                            div(
-                                id = "input_main",
-                                pickerInput(
-                                    inputId = "stock_selection", 
-                                    label   = "Stock List (Pick One to Analyze)",
-                                    choices = stock_list_tbl$label,
-                                    multiple = FALSE, 
-                                    selected = stock_list_tbl %>% 
-                                        filter(label %>% str_detect(pattern = paste0(reactive_values$last_symbol, ","))) %>% 
-                                        pull(label),
-                                    options = pickerOptions(
-                                        actionsBox = FALSE,
-                                        liveSearch = TRUE,
-                                        size = 10
-                                    )
-                                )
-                            ),
-                            div(
-                                id = "input_buttons",
-                                actionButton(inputId = "analyze", label = "Analyze", icon = icon("download")),
-                                div(
-                                    class = "pull-right",
-                                    actionButton(inputId = "favorites_add", label = NULL, icon = icon("heart")),
-                                    actionButton(inputId = "settings_toggle", label = NULL, icon = icon("cog"))
-                                )
-                            ),
-                            div(
-                                id = "input_settings",
-                                hr(),
-                                sliderInput(inputId = "mavg_short", 
-                                            label   = "Short Moving Average (Days)", 
-                                            value   = reactive_values$user_settings %>% pluck(1) %>% pull(mavg_short), 
-                                            min     = 5, 
-                                            max     = 40),
-                                sliderInput(inputId = "mavg_long", 
-                                            label   = "Long Moving Average (Days)", 
-                                            value   = reactive_values$user_settings %>% pluck(1) %>% pull(mavg_long), 
-                                            min     = 50, 
-                                            max     = 120),
-                                sliderInput(inputId = "time_window", 
-                                            label   = "Time Window (Days)", 
-                                            value   = reactive_values$user_settings %>% pluck(1) %>% pull(time_window), 
-                                            min     = 180, 
-                                            max     = 730),
-                                actionButton(inputId = "apply_and_save", label = "Apply & Save", icon = icon("save"))
-                            ) %>% hidden()
-                        )
-                    ),
-                    
-                    # 5.3.2 PLOT PANEL ----
-                    column(
-                        width = 8, 
-                        uiOutput(outputId = "stock_charts")
-                    )
-                ),
-                
-                # 5.4.0 ANALYST COMMENTARY ----
-                div(
-                    class = "container",
-                    id = "commentary",
-                    column(
-                        width = 12,
-                        div(
-                            class = "panel",
-                            div(class = "panel-header", h4("Analyst Commentary")),
-                            div(
-                                class = "panel-body",
-                                textOutput(outputId = "analyst_commentary")
-                            )
-                        )
-                    )
-                )
-            )
+                # Plot Output ----
+                column(width = 8,
+                       uiOutput(outputId = "stock_plot"))
+            ),
             
+            # FAVORITES CARD -----
+            horizontal_line(),
+            
+            fluidRow(
+                
+                column(
+                    width = 12,
+                    h2(class = "pull-left",
+                       "Favorites Cards & Comment"),
+                    actionButton(class = "pull-right",
+                                 inputId = "favorites_clear",
+                                 "Clear Favorites")
+                )
+            ),
+            
+            br(),
+            
+            fluidRow(
+                column(
+                    width = 8,
+                    #verbatimTex,Output(outputId = "favorite_print"),
+                    uiOutput(outputId = "favorite_cards")
+                ),
+                column(width = 3,
+                       class = "panel",
+                       textOutput(outputId = "analyst_commentary")
+                )
+            ),
+            br()
         )
     })
-    
-    
 }
 
 # RUN APP ----
