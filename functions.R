@@ -1,0 +1,117 @@
+about_info <- function() {
+  tagList(
+    p(fa("fas fa-lightbulb", fill = "purple", width = "1.7em", margin_right = "1em"),
+      "Data-driven Midset", style = "font-size: 19px; font-family: 'brandon-text'"),
+    p(fa("fas fa-user-graduate", fill = "purple", width = "2em", margin_right = "0.7em"),
+      "BSc Chemical Engenier & MS Energy Tecnology", style = "font-size: 19px; font-family: 'brandon-text'"),
+    p(fa("fas fa-language", fill = "purple", width = "1.7em", margin_right = "1em"),
+      "Potuguese & Spanish & English", style = "font-size: 19px; font-family: 'brandon-text'"),
+    p(fa("fas fa-at", fill = "purple", width = "2em", margin_right = "0.7em"),
+      "oliveirahenrique70@gmail.com", style = "font-size: 19px; font-family: 'brandon-text'"),
+    p(fa("fas fa-phone", fill = "purple", width = "2em", margin_right = "0.7em"),
+      "+55 (81) 99991-0182", style = "font-size: 19px; font-family: 'brandon-text'")
+  )
+}
+
+bullet_point <- function(){
+  fa("fas fa-caret-right", fill = "#FF50CA", margin_right = "0.7em")
+}
+
+bullet_point_toc <- function(text, id){
+  p(fa("fas fa-caret-right", fill = "#FF50CA", margin_right = "0.5em"),
+    HTML(paste0("<a href='", id, "'>", text, "</a>"))
+  )
+}
+
+ds_report_link <- function(link, name) {
+  tags$a(
+    href = paste0("https://rpubs.com/oliveirahenrique70/", link),
+    paste0("Click here to access ", name ," report")
+  )
+}
+
+app_link <- function(dir, name) {
+  tags$a(
+    target = "_blank",
+    href = paste0("/", dir, "/"),
+    paste0("Click here to access ", name ," report")
+  )
+}
+
+HO_logo <- function() {
+  fluidRow(
+    style = "text-align:center; background-color:#000000",
+    class = "jumbotron",
+    column(1, offset = 4, img(src = "HO.gif", width = 100, style = "padding-top: 12px;")),
+    column(4, h2("Henrique Oliveira"),
+           p("MAKING DATA ACCESSIBLE",
+             align = "center",
+             style = "color: #FF50CA; font-size: 23px; font-family: 'Lucida Console'"))
+  )
+}
+
+img_with_link <- function(img, link, rpubs) {
+  p(tags$a(
+    href = ifelse(rpubs, paste0("https://rpubs.com/oliveirahenrique70/", link), link),
+    target = "_blank",
+    img(src = img)),
+    align = "center"
+  )
+}
+
+created_by_msg <- function() {
+  tagList(
+    hr(style = "border-top: 2px solid #FF50CA;"),
+    fluidRow(
+      style = "text-align:center; background-color:#000000",
+      class = "jumbotron",
+      column(1, offset = 4, img(src = "profile.jpeg", width = 100, style = "padding-top: 12px;")),
+      column(3, h5("created by", style = "font-style: italic"),
+            p("Henrique Oliveira",
+              align = "center",
+              style = "color: #FF50CA; font-size: 23px; font-family: 'Lucida Console'; margin-bottom: 10px;"),
+            p(media_icon(href = "https://www.upwork.com/freelancers/~0121d225d384034e92",
+               icon = "up"),
+              media_icon(href = "https://www.linkedin.com/in/henrique-meira-de-oliveira-4b381232",
+               icon = icon("linkedin-square", lib = "font-awesome", class = "fa-lg")),
+              media_icon(href = "https://github.com/oliveirahenrique70",
+               icon = icon("github", lib = "font-awesome", class = "fa-lg")))),
+    )
+  )
+}
+
+media_icon <- function(href, icon) {
+  tags$a(
+    href = href,
+    icon,
+    style = "color: white; padding-top: 0px; padding-left: 10px;",
+    target = "_blank"
+  )
+}
+
+pink_words <- function(words){
+  tags$span(tags$b(words), style = "color: #FF50CA;")
+}
+
+section_title <- function(title) {
+  tagList(
+    h2(tags$i(title)),
+    hr(style = "border-top: 2px solid #FF50CA;")
+  )
+}
+
+section_subtitle<- function(title, id = NULL) {
+  h3(tags$i(title), id = id, style = "color: #FF50CA")
+}
+
+video_thumbnail <- function(video_url) {
+  div(class = "thumbnail",
+      div(class = "embed-responsive embed-responsive-16by9",
+          tags$iframe(class = "embed-responsive-item",
+                      src = video_url,
+                      allowfullscreen = NA,
+                      width = "650",
+                      height = "400")
+      )
+  )
+}

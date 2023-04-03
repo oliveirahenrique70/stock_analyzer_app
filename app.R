@@ -1,365 +1,209 @@
-# LIBRARIES ----
+# Load packages
 library(shiny)
-library(shinythemes)
-library(shinyWidgets)
-library(tidyverse)
-library(emayili)
-library(shinyalert)
+library(bslib)
+library(shinyjs)
+library(fontawesome)
 
-# SET UP ----
-button_theme_search <- "secondary"
-button_theme_tags <- "info"
-button_theme_cards <- "primary"
+# Load fucntions
+source("functions.R")
 
-# APP CATALOG (META DATA) ----
-app1 <- list(
-    title = "Electricity Generation Analyzer",
-    subtitle = "Energy Data Analysis",
-    description = "An energy data application for analyzing countries' electricity generation during the last few years.",
-    sub_directory = "eletricity_generation_analyzer",
-    tags = tibble(
-        tag = c("AWS", "plotly", "bslib", "shinydashboard"),
-        color = c("primary", "info", "success", "secondary")
-    ) %>% list(),
-    img = "energy_analyzer.jpg"
-)
-
-app2 <- list(
-    title = "Stock Analyzer",
-    subtitle = "Financial Analysis",
-    description = "A financial application for analyzing trends in your favourite SP 500 stocks.",
-    sub_directory = "stock_analyzer_local_data",
-    tags = tibble(
-        tag = c("AWS", "API", "plotly"),
-        color = c("primary", "success", "info")
-    ) %>% list(),
-    img = "stock_analyzer.png"
-)
-
-app3 <- list(
-    title = "Marine Journey Analyzer",
-    subtitle = "Geolocation Analysis",
-    description = "A marine application for analyzing boat journey date, distance and duration.",
-    sub_directory = "marine_analyzer",
-    tags = tibble(
-        tag = c("AWS", "leaflet", "DT", "shinydashboard"),
-        color = c("primary", "danger", "warning", "secondary")
-    ) %>% list(),
-    img = "marine_app.jpg"
-)
-
-app4 <- list(
-    title = "Old Faithful Analyzer",
-    subtitle = "Test Data Analysis",
-    description = "A test application used to validate Shiny Server.",
-    sub_directory = "test_app",
-    tags = tibble(
-        tag = c("AWS", "plotly"),
-        color = c("primary", "info")
-    ) %>% list(),
-    img = "test_app.jpg"
-)
-
-app_catalog_tbl <- bind_rows(app1, app2, app3, app4, .id = "id")
-
-
-# FUNCTIONS ----
-navbar_page_with_inputs <- function(..., inputs) {
-    navbar <- navbarPage(...)
-    form <- tags$form(class = "navbar-form navbar-right", inputs)
-    navbar[[4]][[1]][[1]]$children[[1]]$children[[2]] <-
-        htmltools::tagAppendChild(navbar[[4]][[1]][[1]]$children[[1]]$children[[2]], form)
-    navbar
-}
-
-make_tags <- function(data) {
-    data %>%
-        mutate(tag = as_factor(tag)) %>%
-        group_by(tag) %>%
-        group_split() %>%
-        map(.f = function(data) {
-            span(class =  str_glue("label label-{data$color}"), data$tag)
-        }) %>%
-        tagList()
-}
-
-make_cards <- function(data) {
-    data %>%
-        mutate(id = as_factor(id)) %>%
-        group_by(id) %>%
-        group_split() %>%
-        map(.f = function(data) {
-                div(
-                    class = "col-sm-4",
-                    style = "display:flex",
-                    div(
-                        class = "panel panel-default",
-                        div(class = "panel-heading",
-                            make_tags(
-                                data %>% pluck("tags", 1)
-                            )),
-                        div(
-                            class = "panel-body",
-                            style = "padding:20px;",
-                            
-                            img(src = data$img,
-                                height="170px",
-                                width="320px"),
-                            
-                            br(),
-                            br(),
-                            h4(data$title),
-                            br(),
-                            if (!is.na(data$subtitle)) {
-                                tags$em(data$subtitle)
-                            }
-                        ),
-                        p(data$description,
-                          style = "padding:20px;"),
-                        a(
-                            type = "button",
-                            class = str_glue("btn btn-{button_theme_cards}"),
-                            target = "_blank",
-                            href = str_c("/", data$sub_directory, "/"),
-                            "Open",
-                            style = "margin:20px;"
-                        )
-                    )
-                )
-            }
-        ) %>%
-        tagList()
-}
-
-# UI ----
-
-ui <- fluidPage(
+#### UI ####
+ui <- navbarPage(
+  useShinyjs(),
+  id = "navbar_page",
+  windowTitle = "HO making data accessible",
+  title = "Making data accessible",
+  theme = bs_theme(
+    bootswatch = "darkly",
+    primary = "#C60089",
+    bg = "rgb(0, 0, 0)",
+    fg = "#fff"
+  ),
+  
+  #### CSS ####
+  
+  tags$head(
+    tags$style(HTML("
+      p{font-size: 20px; font-family: 'brandon-text';}
+      a{text-decoration: none; color: white;}"))
+  ),
+  
+  #### Home ####
+  
+  tabPanel(
+    class = "container",
+    "Home",
     
-    #### Header of Web Page ####
-    tagList(tags$head(
-        HTML("<title>HO Apps</title>")
-    )),
+    HO_logo(),
     
-    # Navbar header size
-    tags$style(
-        HTML(
-            ".navbar-nav > li > a, .navbar-brand {
-                   padding-top: 5px;
-                   height: 50px;}"
-        )
+    fluidPage(
+      
+      # First section - Data Potency
+      section_title("Get all Potency from your Data"),
+      p("Welcome to the HO data science consultancy webpage 🧑‍💻"),
+      p("Here you can know more about how to extact all potency from your data. As a experience data science I can help you build data visualization 📈, use machine learning 🤖 and interactive apps ⚙️ to get the best info from your data."),
+      p("Here is how I can help you:"),
+      p(bullet_point(), "Create, read, update and maninupulate ", pink_words("large data"), "."),
+      p(bullet_point(), "Create clear, concise and easy to interpret ", pink_words("data visualisation"),
+        " that accurately represent the data and avoid any distortions or misrepresentations."),
+      p(bullet_point(), "Build intuitive and captivating ", pink_words("data science report"),
+        " to help you undestand important insigths from your data."),
+      p(bullet_point(), "Develop ", pink_words("interactive app"),
+        " that allows users to explore the data in real-time, generate custom reports or visualizations, and perform unique analyses."),
+      p("I'd love to help you get all potency from your data. Please get in touch! 🙂"),
+      section_title("Here are Some Examples of My Work"),
+      p("Throughout my work, my goal is to create tools that help both experts and end users interact well with the data available to them."),
+      
+      # Second section - DS Report
+      section_subtitle("Data Science Reports"),
+      p("A data science report is a document that provides a detailed analysis of a dataset using visualizations, tables, statistical analysis and machine learning techniques."),
+      p("The report typically includes a variety of visualizations, tables, and text that help to convey insights and conclusions drawn from the data. These reports can be used for a variety of purposes, such as identifying trends, predicting future outcomes, or making data-driven decisions."),
+      p(img(src="ds_report.gif"), align = "center"),
+      p("To build a data science report specialized tools and languages such as R & RMarkdown and Python & Jupyter Notebook are used. By using these tools together, data scientists can create reports that are not only informative but also visually appealing and easy to understand."),
+      actionLink("link_to_ds_report", "Click here to access Data Science Reports portfolio"),
+      
+      # Third section - Apps
+      section_subtitle("Interactive Apps"),
+      p("An interactive app is a type of software application that allows users to interact with data or information in a dynamic way. These apps are often used to visualize complex data sets, create custom reports, or perform complex calculations. Interactive apps can be used in a wide range of industries, including finance, healthcare, marketing, and more."),
+      p("One of the key benefits of interactive apps is that they enable users to explore and analyze data in real-time, allowing for a more in-depth understanding of the underlying trends and patterns. With interactive apps, users can filter and sort data based on specific criteria, and then generate custom reports or visualizations that highlight the most important insights."),
+      p("In addition to providing insights into data, interactive apps can also be used to optimize business processes and streamline workflows."),
+      p(img(src="app.gif"), align = "center"),
+      p("Interactive apps can be built using a variety of programming languages and tools, but one popular choice is R Shiny. R Shiny is an open-source web framework that allows developers to build interactive apps using the R programming language. This makes it easy to create custom visualizations and reports using R's extensive library of data visualization and analysis tools."),
+      actionLink("link_to_apps", "Click to access Apps portfolio"),
+      br(),
+
+      # Fourth section - Created by
+      created_by_msg(),
+      br()
+    )
+  ),
+  
+  #### About ####
+  
+  tabPanel("About",
+    class = "container",
+    
+    fluidPage(
+      
+      # First section - Intro text and about info
+      section_title("Known more About Me"),
+      fluidRow(column(7,
+                      video_thumbnail("https://www.youtube.com/embed/hDPFZeTEboE")),
+               column(5,
+                      about_info(),
+                      style = "padding-top: 65px")),
+      br(),
+      p("Hello! 👋 I´m a 33 years old Brazilian engineer with 5 years of experience developing data science projects and getting valuable business insights to clients. My projects use data manipulation & visualization, machine learning models, statistical tests and interactive apps to get the full potential from the data."),
+      p("I have worked in projects envolving data scraping, manipulation of large data, data visualization with unique chart and user interactivity, machine learning models (supervised, unsupervised and deep learning) and interactive apps."),
+      
+      # Second section - Technologies
+      section_title("Technologies"),
+      p("I have experience using the following:"),
+      p(img(src="technologies.png", width = 1000, heigth = 1000), align = "center"),
+
+      # Third section - Created by
+      created_by_msg()
+    )
+  ),
+  
+  navbarMenu(
+    "Portfolio",
+    
+    #### Apps Portfolio ####
+    
+    tabPanel(
+      "Apps",
+      id = "apps_portfolio",
+      fluidPage(
+        class = "container",
+        section_title("Interactive Apps Porfolio"),
+        p("In this section you can access apps created by HO"),
+        
+        # Table of Content
+        bullet_point_toc("Stock Analyzer", "#stock_analyzer"),
+        
+        # First App
+        section_subtitle("Stock Analyzer", id = "stock_analyzer"),
+        p("A financial application for analyzing trends in your favourite SP 500 stocks."),
+        p(img(src = "app.gif"), align = "center"),
+        app_link("stock_analyzer_local_data", "Stock Analyzer"),
+
+        created_by_msg()
+      )
     ),
     
-    style = "padding:0px",
-    collapsible = TRUE,
-    # themeSelector(),
-    theme =  shinytheme("cyborg"),
+    #### Reports Portfolio ####
     
+    tabPanel(
+      "Reports",
+      id = "reports_portfolio",
+      fluidPage(
+        class = "container",
+        section_title("Data Science Reports Porfolio"),
+        p("In this section you can access the data science reports. There are the following reports:"),
+        
+        # Table of Content
+        bullet_point_toc("Pooling Data Analysis", "#pooling_data_analysis"),
+        bullet_point_toc("Solar Panels ROI Analysis", "#solar_panels_roi_analysis"),
+        bullet_point_toc("Books Text Analysis", "#books_text_analysis"),
+        
+        # First Report
+        section_subtitle("Pooling Data Analysis", id = "pooling_data_analysis"),
+        p("This report analyzes a polling dataset that includes information on two election candidates, their images, ballot results and voters' demographics data."),
+        p("The project tasks include candidates image comparison, ballot results according to candidate A image, voters demographics data analysis, and a significance test between ballot results and voters age."),
+        img_with_link("polling_data_analysis.gif", "PollingDataAnalisys", rpubs = TRUE),
+        ds_report_link("PollingDataAnalisys", "Pooling Data Analysis"),
 
-    
-    #### Navbar Page ####
-    navbar_page_with_inputs(
-        title = div(img(src = "HO.gif",
-                        width = 40),
-                    "Apps"),
-        
-        collapsible = TRUE,
-        
-        #### Search Box ####
-        inputs = div(
-            textInput(inputId = "search_box",
-                      label = NULL,
-                      width = 200,
-                      placeholder = "Search for App"),
-            actionButton(inputId = "search_button",
-                         label = "Submit",
-                         class = str_glue("btn-{button_theme_search}")),
-            actionButton(inputId = "clear_button",
-                         label = "Clear",
-                         class = str_glue("btn-{button_theme_search}"))
-        ),
-        
-        #### Tabs ####
-        tabPanel(
-            div("Library",
-            style = "padding-top:15px"),
+        # Second Report
+        section_subtitle("Solar Panels ROI Analysis", id = "solar_panels_roi_analysis"),
+        p("The project is a test case study for MoneyGeek. The objective is to analyzes Solar Panels Return on Investment (ROI) in U.S.A., which is calculated by considering the investment cost, the money saved on energy, the money made by selling extra energy, and the incentives of federal/state tax credits."),
+        p("The project will also discuss electricity cost, investment cost, and solar radiation, which varies by time of day, location, and climate. Finally, the ROI score value will be calculated using a formula that includes electricity price increase, system cost per watt, and solar radiation, to determine which U.S.A. state has the highest ROI."),
+        img_with_link("solar_panel_ROI_analysis.gif", "solar_panels_ROI_analysis", rpubs = TRUE),
+        ds_report_link("solar_panels_ROI_analysis", "Solar Panels ROI Analysis"),
 
-            div(class = "jumbotron",
-                div(
-                    class = "container",
-                    style = "background-color:black;",
-                    column(
-                        width = 10,
-                        h1(strong("Henrique Oliveira's Apps")),
-                        h6("These Apps were created by",
-                        tags$b('HO'),
-                        ". Check out my profiles or send me a direct message"),
-                        "LinkedIn" %>% a(target="_blank", class = "btn btn-lg btn-secondary", href = "https://www.linkedin.com/in/henrique-meira-de-oliveira-4b381232/"),
-                        "Upwork" %>% a(target="_blank", class = "btn btn-lg btn-secondary", href = "https://www.upwork.com/freelancers/~0121d225d384034e92"),
-                        "RPubs" %>% a(target="_blank", class = "btn btn-lg btn-secondary", href = "https://rpubs.com/oliveirahenrique70"),
-                        "GitHub" %>% a(target="_blank", class = "btn btn-lg btn-secondary", href = "https://github.com/oliveirahenrique70"),
-                        actionButton(inputId = "contact_me",
-                                            class = "btn btn-lg",
-                                            style = "color: white; background-color: #9933CC; border-color: black",
-                                            label = "Contact me!"),
-                    ),
-                    column(
-                        width = 2,
-                        style = "padding-top: 15px",
-                        img(
-                            class = "thumbnail img-responsive",
-                            src = "profile.jpeg",
-                            style = "width:150px;"
-                        )
-                    )
-                    )
-                )
-            ,
-            
-            #### Tag Filters ####
-            div(
-                class = "container", 
-                id = "tag-filters",
-                
-                h5("Select Apps feature"),
-                
-                radioGroupButtons(
-                    inputId = "input_tags", 
-                    choices = c("all", app_catalog_tbl %>%
-                                    select(tags) %>%
-                                    unnest() %>%
-                                    pull(tag) %>%
-                                    unique() %>%
-                                    sort()), 
-                    justified = TRUE, 
-                    status = button_theme_tags
-                )
-            ),
-            
-            #### App Library ####
-            div(
-                id = "app-library",
-                uiOutput(outputId = "output_cards")
-            )
-        )
-        
+        # Third Report
+        section_subtitle("Books Text Analysis", "books_text_analysis"),
+        p("The article discusses the analysis of a dataset containing information on books written in English and Spanish. The dataset includes the title, category, and the total count of different types of words in the books."),
+        p("The project will create graphs to show the relationship between adjectives and verbs and a word cloud of the book titles."),
+        img_with_link("ds_report.gif", "text_analysis", rpubs = TRUE),
+        ds_report_link("text_analysis", "Books Text Analysis"),
+
+        created_by_msg()
+      )
     )
+  ),
+
+  #### Media Icons ####
+
+  # Upwork
+  tabPanel(
+    media_icon(href = "https://www.upwork.com/freelancers/~0121d225d384034e92",
+               icon = "up")
+  ),
+  # Linkedin
+  tabPanel(
+    media_icon(href = "https://www.linkedin.com/in/henrique-meira-de-oliveira-4b381232",
+               icon = icon("linkedin-square", lib = "font-awesome", class = "fa-lg"))
+  ),
+  # Github
+  tabPanel(
+    media_icon(href = "https://github.com/oliveirahenrique70",
+               icon = icon("github", lib = "font-awesome", class = "fa-lg"))
+  )
 )
 
-# SERVER ----
-server <- function(session, input, output) {
-    
-    observeEvent(input$contact_me, {
-        showModal(modalDialog(
-            tags$h3("Please share your info!"),
-            textInput("email",
-                      "Enter e-mail:",
-                      placeholder = 'Enter text here'),
-            textAreaInput(inputId = "message",
-                          label = "Enter message:",
-                          height = "200px",
-                          width = "300px"),
-            size = "s",
-            easyClose = TRUE,
-            footer = tagList(actionButton('submit_form', 'Submit'),
-                             modalButton('Cancel')
-            )
-        ))
-        
-    })
-    
-    output$output1 <- renderText({
-        input$input1
-    })
-    
-    observeEvent(input$submit_form, {
-        if (input$email == ""){
-            shinyalert(title = "Please, add your email", type = "error")
-            
-        } else {
-        
-            from <- isolate(input$email)
-            msg <- isolate(input$message)
-            
-            # Create email body
-            email <- envelope(
-                to = "oliveirahenrique70@gmail.com",
-                from = "oliveirahenrique70@gmail.com",
-                subject = str_c("HO Apps Contact - ", from),
-                text = msg
-            )
-            
-            # Create smtp server port
-            smtp <- emayili::server(
-                host = "smtp.gmail.com",
-                port = 465,
-                username = "oliveirahenrique70@gmail.com",
-                password = "mkjppkgwvnfqrzfh"
-            )
-            
-            # Send email
-            smtp(email)
-            
-            shinyalert(title = "Message sent!", type = "success")
-        }
-    })
-    
-    reactive_app_catalog_tbl <- reactiveValues(data = app_catalog_tbl)
-    
-    # Tag filters
-    observeEvent(eventExpr = input$input_tags, {
-        tag_selected <- str_to_lower(input$input_tags)
-        
-        if (tag_selected == "all") {
-            reactive_app_catalog_tbl$data <- app_catalog_tbl
-        } else {
-            ids_selected <- app_catalog_tbl %>%
-                unnest(tags) %>%
-                filter(str_to_lower(tag) == tag_selected) %>%
-                pull(id)
-            
-            reactive_app_catalog_tbl$data <- app_catalog_tbl %>%
-                filter(id %in% ids_selected)
-        }
-    })
-    
-    # Search box & submit button
-    observeEvent(eventExpr = input$search_button,{
-        search_string <- str_to_lower(input$search_box)
-        
-        reactive_app_catalog_tbl$data <- app_catalog_tbl %>%
-            filter(str_to_lower(title) %>% str_detect(search_string) |
-                   str_to_lower(subtitle) %>% str_detect(search_string) |
-                   str_to_lower(description) %>% str_detect(search_string)
-            )
-            
-    })
-    
-    # Clear button
-    observeEvent(eventExpr = input$clear_button,{
-        updateTextInput(session = session,
-                        inputId = "search_box",
-                        value = "",
-                        placeholder = "Search for App")
-        
-        updateRadioGroupButtons(session = session,
-                                inputId = "input_tags",
-                                selected = "All")
-        
-        reactive_app_catalog_tbl$data <- app_catalog_tbl
-    })
-    
-    # Render App Cards
-    output$output_cards <- renderUI({
-        
-        div(class = "container",
-            div(
-                class = "row",
-                style = "display:-webkit-flex; flex-wrap:wrap;",
-                
-                # Cards
-                reactive_app_catalog_tbl$data %>% make_cards()
-            ))
-    })
+server <- function(input, output, session) {
+  
+  # Link to reports and apps portfolio
+  observeEvent(input$link_to_ds_report, {
+    updateNavbarPage(session, "navbar_page", "Reports")
+  })
+  observeEvent(input$link_to_apps, {
+    updateNavbarPage(session, "navbar_page", "Apps")
+  })
+  
+  shinyjs::addClass(id = "navbar_page", class = "navbar-right")
+  #bslib::bs_themer()
 }
 
 # Run the application
