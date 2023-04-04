@@ -1,3 +1,11 @@
+app_link <- function(dir, name) {
+  tags$a(
+    target = "_blank",
+    href = paste0("/", dir, "/"),
+    paste0("Click here to access ", name ," app")
+  )
+}
+
 about_info <- function() {
   tagList(
     p(fa("fas fa-lightbulb", fill = "purple", width = "1.7em", margin_right = "1em"),
@@ -23,18 +31,46 @@ bullet_point_toc <- function(text, id){
   )
 }
 
+created_by_msg <- function() {
+  tagList(
+    hr(style = "border-top: 2px solid #FF50CA;"),
+    fluidRow(
+      style = "text-align:center; background-color:#000000",
+      class = "jumbotron",
+      column(1, offset = 4, img(src = "profile.jpeg", width = 100, style = "padding-top: 12px;")),
+      column(3, h5("created by", style = "font-style: italic"),
+            p("Henrique Oliveira",
+              align = "center",
+              style = "color: #FF50CA; font-size: 23px; font-family: 'Lucida Console'; margin-bottom: 10px;"),
+            p(media_icon(href = "https://www.upwork.com/freelancers/~0121d225d384034e92",
+               icon = "up"),
+              media_icon(href = "https://www.linkedin.com/in/henrique-meira-de-oliveira-4b381232",
+               icon = icon("linkedin", lib = "font-awesome", class = "fa-lg")),
+              media_icon(href = "https://github.com/oliveirahenrique70",
+               icon = icon("github", lib = "font-awesome", class = "fa-lg")))),
+    )
+  )
+}
+
 ds_report_link <- function(link, name) {
   tags$a(
+    target = "_blank",
     href = paste0("https://rpubs.com/oliveirahenrique70/", link),
     paste0("Click here to access ", name ," report")
   )
 }
 
-app_link <- function(dir, name) {
-  tags$a(
-    target = "_blank",
-    href = paste0("/", dir, "/"),
-    paste0("Click here to access ", name ," app")
+feedback_msg <- function(text, author, link) {
+  HTML(
+    paste0(
+      "<blockquote style='font-style: italic; font-size: 17px; border-left: 5px solid #FF50CA; padding-left: 10px;'>",
+      text,
+      "</blockquote> <a target = _blank, href=",
+      link,
+      " style='font-size: 17px; display: block; text-align: right;'>",
+      author,
+      "</a>"
+    )
   )
 }
 
@@ -59,27 +95,6 @@ img_with_link <- function(img, link, rpubs) {
   )
 }
 
-created_by_msg <- function() {
-  tagList(
-    hr(style = "border-top: 2px solid #FF50CA;"),
-    fluidRow(
-      style = "text-align:center; background-color:#000000",
-      class = "jumbotron",
-      column(1, offset = 4, img(src = "profile.jpeg", width = 100, style = "padding-top: 12px;")),
-      column(3, h5("created by", style = "font-style: italic"),
-            p("Henrique Oliveira",
-              align = "center",
-              style = "color: #FF50CA; font-size: 23px; font-family: 'Lucida Console'; margin-bottom: 10px;"),
-            p(media_icon(href = "https://www.upwork.com/freelancers/~0121d225d384034e92",
-               icon = "up"),
-              media_icon(href = "https://www.linkedin.com/in/henrique-meira-de-oliveira-4b381232",
-               icon = icon("linkedin", lib = "font-awesome", class = "fa-lg")),
-              media_icon(href = "https://github.com/oliveirahenrique70",
-               icon = icon("github", lib = "font-awesome", class = "fa-lg")))),
-    )
-  )
-}
-
 media_icon <- function(href, icon) {
   tags$a(
     href = href,
@@ -100,8 +115,15 @@ section_title <- function(title) {
   )
 }
 
-section_subtitle<- function(title, id = NULL) {
-  h3(tags$i(title), id = id, style = "color: #FF50CA")
+section_subtitle<- function(title, id = NULL, hr = TRUE) {
+  if (hr) {
+    tagList(
+      hr(style = "border-top: 2px solid #FF50CA;"),
+      h3(tags$i(title), id = id, style = "color: #FF50CA")
+    )
+  } else {
+    h3(tags$i(title), id = id, style = "color: #FF50CA")
+  }
 }
 
 video_thumbnail <- function(video_url) {

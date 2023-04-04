@@ -40,22 +40,19 @@ ui <- navbarPage(
       
       # First section - Data Potency
       section_title("Get all Potency from your Data"),
-      p("Welcome to the HO data science consultancy webpage 🧑‍💻"),
-      p("Here you can know more about how to extact all potency from your data. As a experience data science I can help you build data visualization 📈, use machine learning 🤖 and interactive apps ⚙️ to get the best info from your data."),
-      p("Here is how I can help you:"),
-      p(bullet_point(), "Create, read, update and maninupulate ", pink_words("large data"), "."),
-      p(bullet_point(), "Create clear, concise and easy to interpret ", pink_words("data visualisation"),
-        " that accurately represent the data and avoid any distortions or misrepresentations."),
+      p("Welcome to the HO data science consultancy webpage 🧑‍💻. Here is how I can help you extract all potency from your data:"),
+      p(bullet_point(), "Create, read, update and manipulate ", pink_words("large data"), "."),
+      p(bullet_point(), "Create clear, concise and easy-to-interpret ", pink_words("data visualization"),
+        " that accurately represents the data and avoids any distortions or misrepresentations."),
       p(bullet_point(), "Build intuitive and captivating ", pink_words("data science report"),
-        " to help you undestand important insigths from your data."),
-      p(bullet_point(), "Develop ", pink_words("interactive app"),
-        " that allows users to explore the data in real-time, generate custom reports or visualizations, and perform unique analyses."),
-      p("I'd love to help you get all potency from your data. Please get in touch! 🙂"),
-      section_title("Here are Some Examples of My Work"),
-      p("Throughout my work, my goal is to create tools that help both experts and end users interact well with the data available to them."),
+        " to help you understand important insights from your data."),
+      p(bullet_point(), "Develop ", pink_words("interactive apps"),
+        " that allows users to explore the data in real time, generate custom reports or visualizations, and perform unique analyses."),
+      p("Throughout my work, my goal is to create tools that help both experts and amateur users to interact with the data available to them."),
+      section_title("Use Case Examples"),
       
       # Second section - DS Report
-      section_subtitle("Data Science Reports"),
+      section_subtitle("Data Science Reports", hr = FALSE),
       p("A data science report is a document that provides a detailed analysis of a dataset using visualizations, tables, statistical analysis and machine learning techniques."),
       p("The report typically includes a variety of visualizations, tables, and text that help to convey insights and conclusions drawn from the data. These reports can be used for a variety of purposes, such as identifying trends, predicting future outcomes, or making data-driven decisions."),
       p(img(src="ds_report.gif"), align = "center"),
@@ -69,7 +66,7 @@ ui <- navbarPage(
       p("In addition to providing insights into data, interactive apps can also be used to optimize business processes and streamline workflows."),
       p(img(src="app.gif"), align = "center"),
       p("Interactive apps can be built using a variety of programming languages and tools, but one popular choice is R Shiny. R Shiny is an open-source web framework that allows developers to build interactive apps using the R programming language. This makes it easy to create custom visualizations and reports using R's extensive library of data visualization and analysis tools."),
-      actionLink("link_to_apps", "Click to access Apps portfolio"),
+      actionLink("link_to_apps", "Click here to access Apps portfolio"),
       br(),
 
       # Fourth section - Created by
@@ -93,13 +90,30 @@ ui <- navbarPage(
                       about_info(),
                       style = "padding-top: 65px")),
       br(),
-      p("Hello! 👋 I´m a 33 years old Brazilian engineer with 5 years of experience developing data science projects and getting valuable business insights to clients. My projects use data manipulation & visualization, machine learning models, statistical tests and interactive apps to get the full potential from the data."),
-      p("I have worked in projects envolving data scraping, manipulation of large data, data visualization with unique chart and user interactivity, machine learning models (supervised, unsupervised and deep learning) and interactive apps."),
-      
+      p("Hello! 👋 I'm a 33 years old Brazilian engineer with 5 years of experience developing data science projects and getting valuable business insights to clients. My projects use data manipulation & visualization, machine learning models, statistical tests and interactive apps to get the full potential from the data."),
+      p("I have worked in projects with data scraping, data manipulation, data visualization, machine learning models (supervised, unsupervised and deep learning) and interactive apps."),
+      p("I would love to help you get all potency from your data. Please get in touch! 🙂"),
+
       # Second section - Technologies
       section_title("Technologies"),
-      p("I have experience using the following:"),
+      p("I have experience with the following:"),
       p(img(src="technologies.png", width = 1000, heigth = 1000), align = "center"),
+
+      section_title("Clients Feedback"),
+      fluidRow(
+        column(3, feedback_msg("It was a pleasure working with Henrique",
+                               "Arctoris Ltd",
+                               "https://www.arctoris.com")),
+        column(3, feedback_msg("Henrique delivered good work on this python development project and I enjoyed working with him. His communication was top-notch, he met all deadlines, and his skills were reasonably strong. I enjoyed working with Henrique and will likely have additional jobs for him in the future.",
+                               "Truss Investments",
+                               "#")),
+        column(3, feedback_msg("Excellent communication and expert in R. He solved my problem in one hour!",
+                               "Spyridon Hab",
+                               "https://www.upwork.com/jobs/~019ee484b55d962498")),
+        column(3, feedback_msg("Henrique is a fantastic data scientist. He helped me with a project that was specifically challenging for me. He not only was able to complete it on time but took the time to explain things to me in a way that I understood. I left more knowledgeable in R and machine learning as a whole. Thanks so much!",
+                               "Axios Enterprises, LLC",
+                               "https://www.upwork.com/jobs/~01f7163e68621b674f"))
+      ),
 
       # Third section - Created by
       created_by_msg()
@@ -117,10 +131,11 @@ ui <- navbarPage(
       fluidPage(
         class = "container",
         section_title("Interactive Apps Porfolio"),
-        p("In this section you can access apps created by HO"),
+        p("In this section you can access the following interactive apps:"),
         
         # Table of Content
         bullet_point_toc("Stock Analyzer", "#stock_analyzer"),
+        bullet_point_toc("Maritime Transport Analyzer", "#maritime_transport_analyzer"),
         
         # First App
         section_subtitle("Stock Analyzer", id = "stock_analyzer"),
@@ -130,7 +145,7 @@ ui <- navbarPage(
         app_link("stock_analyzer_local_data", "Stock Analyzer"),
 
         # Second App
-        section_subtitle("Maritime Transport Analyzer", id = "stock_analyzer"),
+        section_subtitle("Maritime Transport Analyzer", id = "maritime_transport_analyzer"),
         p("An app developed in 2020, it reads in a dataset with maritime transport information, and creates a table and an interactive map graph of the data. The user interface includes value boxes, ship data filters. The server allows for reactive data inputs"),
         p(tags$i("Tecnologies"), "leaflet"),
         img_with_link("marine_app.gif", "/marine_analyzer/", rpubs = FALSE),
@@ -148,13 +163,13 @@ ui <- navbarPage(
       fluidPage(
         class = "container",
         section_title("Data Science Reports Porfolio"),
-        p("In this section you can access the data science reports. There are the following reports:"),
+        p("In this section you can access the following data science reports:"),
         
         # Table of Content
         bullet_point_toc("Pooling Data Analysis", "#pooling_data_analysis"),
         bullet_point_toc("Solar Panels ROI Analysis", "#solar_panels_roi_analysis"),
         bullet_point_toc("Books Text Analysis", "#books_text_analysis"),
-        
+
         # First Report
         section_subtitle("Pooling Data Analysis", id = "pooling_data_analysis"),
         p("This report analyzes a polling dataset that includes information on two election candidates, their images, ballot results and voters' demographics data."),
