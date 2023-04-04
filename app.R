@@ -183,7 +183,7 @@ ui <- navbarPage(
   # Linkedin
   tabPanel(
     media_icon(href = "https://www.linkedin.com/in/henrique-meira-de-oliveira-4b381232",
-               icon = icon("linkedin-square", lib = "font-awesome", class = "fa-lg"))
+               icon = icon("linkedin", lib = "font-awesome", class = "fa-lg"))
   ),
   # Github
   tabPanel(
