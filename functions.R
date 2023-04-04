@@ -34,7 +34,7 @@ app_link <- function(dir, name) {
   tags$a(
     target = "_blank",
     href = paste0("/", dir, "/"),
-    paste0("Click here to access ", name ," report")
+    paste0("Click here to access ", name ," app")
   )
 }
 
@@ -73,7 +73,7 @@ created_by_msg <- function() {
             p(media_icon(href = "https://www.upwork.com/freelancers/~0121d225d384034e92",
                icon = "up"),
               media_icon(href = "https://www.linkedin.com/in/henrique-meira-de-oliveira-4b381232",
-               icon = icon("linkedin-square", lib = "font-awesome", class = "fa-lg")),
+               icon = icon("linkedin", lib = "font-awesome", class = "fa-lg")),
               media_icon(href = "https://github.com/oliveirahenrique70",
                icon = icon("github", lib = "font-awesome", class = "fa-lg")))),
     )

@@ -52,7 +52,7 @@ ui <- fluidPage(
                offset = 0),
         
         # Add App title
-        column(h1(HTML("<em> Marine App </em>")),
+        column(h1(HTML("<em> Maritime Transport Analyzer App </em>")),
                align = 'center',
                width = 7,
                offset = 1)),

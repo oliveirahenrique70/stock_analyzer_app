@@ -124,10 +124,18 @@ ui <- navbarPage(
         
         # First App
         section_subtitle("Stock Analyzer", id = "stock_analyzer"),
-        p("A financial application for analyzing trends in your favourite SP 500 stocks."),
-        p(img(src = "app.gif"), align = "center"),
+        p("A financial app for analyzing trends in your favourite SP 500 stocks. The app uses an API to get the stock data and allows users to analyze and visualize stock data."),
+        p("Users can customize settings such as moving averages and analysis time windows. Furthermore, users can also add or remove favorite stocks and view the corresponding plots"),
+        img_with_link("app.gif", "/stock_analyzer_local_data/", rpubs = FALSE),
         app_link("stock_analyzer_local_data", "Stock Analyzer"),
 
+        # Second App
+        section_subtitle("Maritime Transport Analyzer", id = "stock_analyzer"),
+        p("An app developed in 2020, it reads in a dataset with maritime transport information, and creates a table and an interactive map graph of the data. The user interface includes value boxes, ship data filters. The server allows for reactive data inputs"),
+        p(tags$i("Tecnologies"), "leaflet"),
+        img_with_link("marine_app.gif", "/marine_analyzer/", rpubs = FALSE),
+        app_link("marine_analyzer", "Maritime Transport Analyzer"),
+  
         created_by_msg()
       )
     ),
