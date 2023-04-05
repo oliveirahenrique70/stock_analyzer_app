@@ -44,7 +44,7 @@ ui <- navbarPage(
       p(bullet_point(), "Create, read, update and manipulate ", pink_words("large data"), "."),
       p(bullet_point(), "Create clear, concise and easy-to-interpret ", pink_words("data visualization"),
         " that accurately represents the data and avoids any distortions or misrepresentations."),
-      p(bullet_point(), "Build intuitive and captivating ", pink_words("data science report"),
+      p(bullet_point(), "Build intuitive and captivating ", pink_words("data science reports"),
         " to help you understand important insights from your data."),
       p(bullet_point(), "Develop ", pink_words("interactive apps"),
         " that allows users to explore the data in real time, generate custom reports or visualizations, and perform unique analyses."),
@@ -56,16 +56,13 @@ ui <- navbarPage(
       p("A data science report is a document that provides a detailed analysis of a dataset using visualizations, tables, statistical analysis and machine learning techniques."),
       p("The report typically includes a variety of visualizations, tables, and text that help to convey insights and conclusions drawn from the data. These reports can be used for a variety of purposes, such as identifying trends, predicting future outcomes, or making data-driven decisions."),
       p(img(src="ds_report.gif"), align = "center"),
-      p("To build a data science report specialized tools and languages such as R & RMarkdown and Python & Jupyter Notebook are used. By using these tools together, data scientists can create reports that are not only informative but also visually appealing and easy to understand."),
       actionLink("link_to_ds_report", "Click here to access Data Science Reports portfolio"),
       
       # Third section - Apps
       section_subtitle("Interactive Apps"),
-      p("An interactive app is a type of software application that allows users to interact with data or information in a dynamic way. These apps are often used to visualize complex data sets, create custom reports, or perform complex calculations. Interactive apps can be used in a wide range of industries, including finance, healthcare, marketing, and more."),
-      p("One of the key benefits of interactive apps is that they enable users to explore and analyze data in real-time, allowing for a more in-depth understanding of the underlying trends and patterns. With interactive apps, users can filter and sort data based on specific criteria, and then generate custom reports or visualizations that highlight the most important insights."),
-      p("In addition to providing insights into data, interactive apps can also be used to optimize business processes and streamline workflows."),
+      p("An interactive app is a type of software application that allows users to interact with data or information in a dynamically."),
+      p("One of the key benefits of interactive apps is that they enable users to explore and analyze data in real time, allowing for a more in-depth understanding of the underlying trends and patterns. With interactive apps, users can filter and sort data based on specific criteria, and then generate custom reports or visualizations that highlight the most important insights."),
       p(img(src="app.gif"), align = "center"),
-      p("Interactive apps can be built using a variety of programming languages and tools, but one popular choice is R Shiny. R Shiny is an open-source web framework that allows developers to build interactive apps using the R programming language. This makes it easy to create custom visualizations and reports using R's extensive library of data visualization and analysis tools."),
       actionLink("link_to_apps", "Click here to access Apps portfolio"),
       br(),
 
@@ -91,13 +88,15 @@ ui <- navbarPage(
                       style = "padding-top: 65px")),
       br(),
       p("Hello! 👋 I'm a 33 years old Brazilian engineer with 5 years of experience developing data science projects and getting valuable business insights to clients. My projects use data manipulation & visualization, machine learning models, statistical tests and interactive apps to get the full potential from the data."),
-      p("I have worked in projects with data scraping, data manipulation, data visualization, machine learning models (supervised, unsupervised and deep learning) and interactive apps."),
       p("I would love to help you get all potency from your data. Please get in touch! 🙂"),
 
       # Second section - Technologies
-      section_title("Technologies"),
+      section_title("Academical and Work Experience"),
       p("I have experience with the following:"),
-      p(img(src="technologies.png", width = 1000, heigth = 1000), align = "center"),
+
+      # Technologies
+      actionButton("technologies_button", HTML("&nbsp;&nbsp; Show Technologies"), icon = icon("chevron-down")),
+      p(img(src="technologies.png", width = 1000, heigth = 1000, style="display: none;", id = "technologies"), align = "center"),
 
       section_title("Clients Feedback"),
       fluidRow(
@@ -119,7 +118,9 @@ ui <- navbarPage(
       created_by_msg()
     )
   ),
-  
+
+#### Portfolio ####
+
   navbarMenu(
     "Portfolio",
     
@@ -139,8 +140,7 @@ ui <- navbarPage(
         
         # First App
         section_subtitle("Stock Analyzer", id = "stock_analyzer"),
-        p("A financial app for analyzing trends in your favourite SP 500 stocks. The app uses an API to get the stock data and allows users to analyze and visualize stock data."),
-        p("Users can customize settings such as moving averages and analysis time windows. Furthermore, users can also add or remove favorite stocks and view the corresponding plots"),
+        p("A financial app for analyzing trends in your favourite SP 500 stocks. The app uses an API to get the stock data and allows users to analyze and visualize stock data. Users can customize settings such as moving averages and analysis time windows. Furthermore, users can also add or remove favorite stocks and view the corresponding plots"),
         img_with_link("app.gif", "/stock_analyzer_local_data/", rpubs = FALSE),
         app_link("stock_analyzer_local_data", "Stock Analyzer"),
 
@@ -179,15 +179,15 @@ ui <- navbarPage(
 
         # Second Report
         section_subtitle("Solar Panels ROI Analysis", id = "solar_panels_roi_analysis"),
-        p("The project is a test case study for MoneyGeek. The objective is to analyzes Solar Panels Return on Investment (ROI) in U.S.A., which is calculated by considering the investment cost, the money saved on energy, the money made by selling extra energy, and the incentives of federal/state tax credits."),
-        p("The project will also discuss electricity cost, investment cost, and solar radiation, which varies by time of day, location, and climate. Finally, the ROI score value will be calculated using a formula that includes electricity price increase, system cost per watt, and solar radiation, to determine which U.S.A. state has the highest ROI."),
+        p("The project objective is to analyzes Solar Panels Return on Investment (ROI) in U.S.A. states, which is calculated by considering the investment cost, the money saved on energy, the money made by selling extra energy, and the incentives of federal/state tax credits."),
+        p("The ROI score value will be calculated using a formula that includes electricity price increase, system cost per watt, and solar radiation, to determine which U.S.A. state has the highest ROI."),
         img_with_link("solar_panel_ROI_analysis.gif", "solar_panels_ROI_analysis", rpubs = TRUE),
         ds_report_link("solar_panels_ROI_analysis", "Solar Panels ROI Analysis"),
 
         # Third Report
         section_subtitle("Books Text Analysis", "books_text_analysis"),
-        p("The article discusses the analysis of a dataset containing information on books written in English and Spanish. The dataset includes the title, category, and the total count of different types of words in the books."),
-        p("The project will create graphs to show the relationship between adjectives and verbs and a word cloud of the book titles."),
+        p("The article discusses the analysis of a dataset containing information on books written in English and Spanish. The dataset includes the title, category, and the total count of different types of word classes in the books."),
+        p("The project will create graphs to show the relationship between adjectives and verbs also a word cloud of the book titles."),
         img_with_link("ds_report.gif", "text_analysis", rpubs = TRUE),
         ds_report_link("text_analysis", "Books Text Analysis"),
 
@@ -223,6 +223,30 @@ server <- function(input, output, session) {
   })
   observeEvent(input$link_to_apps, {
     updateNavbarPage(session, "navbar_page", "Apps")
+  })
+
+  showImage <- reactiveVal(FALSE)
+  observeEvent(input$technologies_button, {
+    showImage(!showImage())
+    if (showImage()) {
+      updateActionButton(
+        session,
+        "technologies_button",
+        label = HTML("&nbsp;&nbsp; Hide Technologies"),
+        icon = icon("chevron-up")
+      )
+    } else {
+      updateActionButton(
+        session,
+        "technologies_button",
+        label = HTML("&nbsp;&nbsp; Show Technologies"),
+        icon = icon("chevron-down")
+      )
+    }
+  })
+
+  observeEvent(input$technologies_button, {
+    shinyjs::toggle("technologies", anim = TRUE, animType = "fade")
   })
   
   shinyjs::addClass(id = "navbar_page", class = "navbar-right")
