@@ -55,14 +55,14 @@ ui <- navbarPage(
       section_subtitle("Data Science Reports", hr = FALSE),
       p("A data science report is a document that provides a detailed analysis of a dataset using visualizations, tables, statistical analysis and machine learning techniques."),
       p("The report typically includes a variety of visualizations, tables, and text that help to convey insights and conclusions drawn from the data. These reports can be used for a variety of purposes, such as identifying trends, predicting future outcomes, or making data-driven decisions."),
-      p(img(src="ds_report.gif"), align = "center"),
+      p(img(src="ds_report.gif", width = "80%"), align = "center"),
       actionLink("link_to_ds_report", "Click here to access Data Science Reports portfolio"),
       
       # Third section - Apps
       section_subtitle("Interactive Apps"),
       p("An interactive app is a type of software application that allows users to interact with data or information in a dynamically."),
       p("One of the key benefits of interactive apps is that they enable users to explore and analyze data in real time, allowing for a more in-depth understanding of the underlying trends and patterns. With interactive apps, users can filter and sort data based on specific criteria, and then generate custom reports or visualizations that highlight the most important insights."),
-      p(img(src="app.gif"), align = "center"),
+      p(img(src="app.gif", width = "80%"), align = "center"),
       actionLink("link_to_apps", "Click here to access Apps portfolio"),
       br(),
 
@@ -90,13 +90,21 @@ ui <- navbarPage(
       p("Hello! 👋 I'm a 33 years old Brazilian engineer with 5 years of experience developing data science projects and getting valuable business insights to clients. My projects use data manipulation & visualization, machine learning models, statistical tests and interactive apps to get the full potential from the data."),
       p("I would love to help you get all potency from your data. Please get in touch! 🙂"),
 
-      # Second section - Technologies
-      section_title("Academical and Work Experience"),
-      p("I have experience with the following:"),
-
       # Technologies
       actionButton("technologies_button", HTML("&nbsp;&nbsp; Show Technologies"), icon = icon("chevron-down")),
-      p(img(src="technologies.png", width = 1000, heigth = 1000, style="display: none;", id = "technologies"), align = "center"),
+      p(img(src="technologies.png", width = "90%", style="display: none;", id = "technologies"), align = "center"),
+
+      # Second section - Academical Experience
+      section_title("Academical Experience"),
+      p(bullet_point(), "Master in Energy Technology at the University of Pernambuco"),
+      p(bullet_point(), "Post-grad in Renewable Energy at the University of Pernambuco"),
+      p(bullet_point(), "Graduation in Chemical Engineering at the Federal University of Pernambuco"),
+
+      # Third section - Work Experience
+      section_title("Work Experience"),
+      p(bullet_point(), "Data Scientist at", a("Upwork", href = "https://www.upwork.com/", target = "_blank"), ". From November 2018 to Nowadays"),
+      p(bullet_point(), "Data Scientist at", a("Arctoris", href = "https://www.arctoris.com/", target = "_blank"), ". From May 2021 to November 2022"),
+      p(bullet_point(), "Data Scientist at Truss Investments. From December 2020 to May 2021"),
 
       section_title("Clients Feedback"),
       fluidRow(

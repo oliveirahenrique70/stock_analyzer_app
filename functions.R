@@ -9,9 +9,9 @@ app_link <- function(dir, name) {
 about_info <- function() {
   tagList(
     p(fa("fas fa-lightbulb", fill = "purple", width = "1.7em", margin_right = "1em"),
-      "Data-driven Midset", style = "font-size: 19px; font-family: 'brandon-text'"),
+      "Data-driven Mindset", style = "font-size: 19px; font-family: 'brandon-text'"),
     p(fa("fas fa-user-graduate", fill = "purple", width = "2em", margin_right = "0.7em"),
-      "BSc Chemical Engenier & MS Energy Tecnology", style = "font-size: 19px; font-family: 'brandon-text'"),
+      "BSc Chemical Engenieer & MS Energy Technology", style = "font-size: 19px; font-family: 'brandon-text'"),
     p(fa("fas fa-language", fill = "purple", width = "1.7em", margin_right = "1em"),
       "Potuguese & Spanish & English", style = "font-size: 19px; font-family: 'brandon-text'"),
     p(fa("fas fa-at", fill = "purple", width = "2em", margin_right = "0.7em"),
