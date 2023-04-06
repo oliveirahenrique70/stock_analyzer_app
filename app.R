@@ -101,7 +101,7 @@ ui <- navbarPage(
       p(bullet_point(), "Graduation in Chemical Engineering at the Federal University of Pernambuco"),
 
       # Third section - Work Experience
-      section_title("Work Experience"),
+      section_title("Professional Experience"),
       p(bullet_point(), "Data Scientist at", a("Upwork", href = "https://www.upwork.com/", target = "_blank"), ". From November 2018 to Nowadays"),
       p(bullet_point(), "Data Scientist at", a("Arctoris", href = "https://www.arctoris.com/", target = "_blank"), ". From May 2021 to November 2022"),
       p(bullet_point(), "Data Scientist at Truss Investments. From December 2020 to May 2021"),
