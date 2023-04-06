@@ -183,7 +183,7 @@ ui <- navbarPage(
         section_subtitle("Pooling Data Analysis", id = "pooling_data_analysis"),
         p("This report analyzes a polling dataset that includes information on two election candidates, their images, ballot results and voters' demographics data."),
         p("The project tasks include candidates image comparison, ballot results according to candidate A image, voters demographics data analysis, and a significance test between ballot results and voters age."),
-        packages_bagde(c("tidyverse", "rmakdown", "plotly", "kableExtra")),
+        packages_bagde(c("tidyverse", "rmarkdown", "plotly", "kableExtra")),
         img_with_link("polling_data_analysis.gif", "PollingDataAnalisys", rpubs = TRUE),
         ds_report_link("PollingDataAnalisys", "Pooling Data Analysis"),
 
@@ -191,7 +191,7 @@ ui <- navbarPage(
         section_subtitle("Solar Panels ROI Analysis", id = "solar_panels_roi_analysis"),
         p("The project objective is to analyzes Solar Panels Return on Investment (ROI) in U.S.A. states, which is calculated by considering the investment cost, the money saved on energy, the money made by selling extra energy, and the incentives of federal/state tax credits."),
         p("The ROI score value will be calculated using a formula that includes electricity price increase, system cost per watt, and solar radiation, to determine which U.S.A. state has the highest ROI."),
-        packages_bagde(c("tidyverse", "rmakdown", "plotly", "DT", "htmltools")),
+        packages_bagde(c("tidyverse", "rmarkdown", "plotly", "DT", "htmltools")),
         img_with_link("solar_panel_ROI_analysis.gif", "solar_panels_ROI_analysis", rpubs = TRUE),
         ds_report_link("solar_panels_ROI_analysis", "Solar Panels ROI Analysis"),
 
@@ -199,7 +199,7 @@ ui <- navbarPage(
         section_subtitle("Books Text Analysis", "books_text_analysis"),
         p("The article discusses the analysis of a dataset containing information on books written in English and Spanish. The dataset includes the title, category, and the total count of different types of word classes in the books."),
         p("The project will create graphs to show the relationship between adjectives and verbs also a word cloud of the book titles."),
-        packages_bagde(c("tidyverse", "rmakdown", "plotly", "tidytext", "stopwords", "wordcloud2")),
+        packages_bagde(c("tidyverse", "rmarkdown", "plotly", "tidytext", "stopwords", "wordcloud2")),
         img_with_link("ds_report.gif", "text_analysis", rpubs = TRUE),
         ds_report_link("text_analysis", "Books Text Analysis"),
 
