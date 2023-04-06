@@ -95,7 +95,7 @@ ui <- navbarPage(
       p(img(src="technologies.png", width = "90%", style="display: none;", id = "technologies"), align = "center"),
 
       # Second section - Academical Experience
-      section_title("Academical Experience"),
+      section_title("Academic Experience"),
       p(bullet_point(), "Master in Energy Technology at the University of Pernambuco"),
       p(bullet_point(), "Post-grad in Renewable Energy at the University of Pernambuco"),
       p(bullet_point(), "Graduation in Chemical Engineering at the Federal University of Pernambuco"),
