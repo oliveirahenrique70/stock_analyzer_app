@@ -90,9 +90,9 @@ img_with_link <- function(img, link, rpubs) {
   p(tags$a(
     href = ifelse(rpubs, paste0("https://rpubs.com/oliveirahenrique70/", link), link),
     target = "_blank",
-    img(src = img)),
+    img(src = img, width = "80%")),
     align = "center"
-  )
+    )
 }
 
 media_icon <- function(href, icon) {
@@ -103,6 +103,17 @@ media_icon <- function(href, icon) {
     target = "_blank"
   )
 }
+
+packages_bagde <- function(packages) {
+  tags$ul(lapply(packages,
+    function(pkg) {
+      tags$li(class = "badge",
+              style = "background-color: #AB029C; font-size: 14px;",
+              pkg)
+    }
+  ), align = "center")
+}
+
 
 pink_words <- function(words){
   tags$span(tags$b(words), style = "color: #FF50CA;")
