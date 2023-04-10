@@ -145,15 +145,19 @@ ui <- navbarPage(
         # Table of Content
         bullet_point_toc("Stock Analyzer", "#stock_analyzer"),
         bullet_point_toc("Maritime Transport Analyzer", "#maritime_transport_analyzer"),
-        
+
         # First App
+        section_subtitle("Biodiversity Analyzer", small = "created in 2023", id = "biodiversity_analyzer"),
+        app_link("biodiversity_analyzer", "Biodiversity Analyzer"),
+
+        # Second App
         section_subtitle("Stock Analyzer", small = "created in 2022", id = "stock_analyzer"),
         p("A financial app for analyzing trends in your favourite SP 500 stocks. The app uses an API to get the stock data and allows users to analyze and visualize stock data. Users can customize settings such as moving averages and analysis time windows. Furthermore, users can also add or remove favorite stocks and view the corresponding plots"),
         packages_bagde(c("tidyverse", "tidyquant", "shiny", "shinyWidgets", "plotly", "shinyjs")),
         img_with_link("app.gif", "/stock_analyzer_local_data/", rpubs = FALSE),
         app_link("stock_analyzer_local_data", "Stock Analyzer"),
 
-        # Second App
+        # Third App
         section_subtitle("Maritime Transport Analyzer", small = "created in 2020", id = "maritime_transport_analyzer"),
         p("The app reads in a dataset with maritime transport information, and creates a table and an interactive map graph of the data. The user interface includes value boxes, ship data filters. The server allows for reactive data inputs"),
         packages_bagde(c("tidyverse", "shiny", "shinydashboard", "leaflet", "DT")),
