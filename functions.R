@@ -126,11 +126,14 @@ section_title <- function(title) {
   )
 }
 
-section_subtitle<- function(title, id = NULL, hr = TRUE) {
+section_subtitle<- function(title, small = NULL, id = NULL, hr = TRUE) {
   if (hr) {
     tagList(
       hr(style = "border-top: 2px solid #FF50CA;"),
-      h3(tags$i(title), id = id, style = "color: #FF50CA")
+      div(
+      h3(tags$i(title), id = id, style = "color: #FF50CA; display: inline"),
+      h5(tags$i(small), style = "color: #FF50CA; display: inline")
+      )
     )
   } else {
     h3(tags$i(title), id = id, style = "color: #FF50CA")

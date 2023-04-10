@@ -147,15 +147,15 @@ ui <- navbarPage(
         bullet_point_toc("Maritime Transport Analyzer", "#maritime_transport_analyzer"),
         
         # First App
-        section_subtitle("Stock Analyzer", id = "stock_analyzer"),
+        section_subtitle("Stock Analyzer", small = "created in 2022", id = "stock_analyzer"),
         p("A financial app for analyzing trends in your favourite SP 500 stocks. The app uses an API to get the stock data and allows users to analyze and visualize stock data. Users can customize settings such as moving averages and analysis time windows. Furthermore, users can also add or remove favorite stocks and view the corresponding plots"),
         packages_bagde(c("tidyverse", "tidyquant", "shiny", "shinyWidgets", "plotly", "shinyjs")),
         img_with_link("app.gif", "/stock_analyzer_local_data/", rpubs = FALSE),
         app_link("stock_analyzer_local_data", "Stock Analyzer"),
 
         # Second App
-        section_subtitle("Maritime Transport Analyzer", id = "maritime_transport_analyzer"),
-        p("An app developed in 2020, it reads in a dataset with maritime transport information, and creates a table and an interactive map graph of the data. The user interface includes value boxes, ship data filters. The server allows for reactive data inputs"),
+        section_subtitle("Maritime Transport Analyzer", small = "created in 2020", id = "maritime_transport_analyzer"),
+        p("The app reads in a dataset with maritime transport information, and creates a table and an interactive map graph of the data. The user interface includes value boxes, ship data filters. The server allows for reactive data inputs"),
         packages_bagde(c("tidyverse", "shiny", "shinydashboard", "leaflet", "DT")),
         img_with_link("marine_app.gif", "/marine_analyzer/", rpubs = FALSE),
         app_link("marine_analyzer", "Maritime Transport Analyzer"),
@@ -180,7 +180,7 @@ ui <- navbarPage(
         bullet_point_toc("Books Text Analysis", "#books_text_analysis"),
 
         # First Report
-        section_subtitle("Pooling Data Analysis", id = "pooling_data_analysis"),
+        section_subtitle("Pooling Data Analysis", small = "created in July 2020", id = "pooling_data_analysis"),
         p("This report analyzes a polling dataset that includes information on two election candidates, their images, ballot results and voters' demographics data."),
         p("The project tasks include candidates image comparison, ballot results according to candidate A image, voters demographics data analysis, and a significance test between ballot results and voters age."),
         packages_bagde(c("tidyverse", "rmarkdown", "plotly", "kableExtra")),
@@ -188,7 +188,7 @@ ui <- navbarPage(
         ds_report_link("PollingDataAnalisys", "Pooling Data Analysis"),
 
         # Second Report
-        section_subtitle("Solar Panels ROI Analysis", id = "solar_panels_roi_analysis"),
+        section_subtitle("Solar Panels ROI Analysis", small = "created in October 2022", id = "solar_panels_roi_analysis"),
         p("The project objective is to analyzes Solar Panels Return on Investment (ROI) in U.S.A. states, which is calculated by considering the investment cost, the money saved on energy, the money made by selling extra energy, and the incentives of federal/state tax credits."),
         p("The ROI score value will be calculated using a formula that includes electricity price increase, system cost per watt, and solar radiation, to determine which U.S.A. state has the highest ROI."),
         packages_bagde(c("tidyverse", "rmarkdown", "plotly", "DT", "htmltools")),
@@ -196,7 +196,7 @@ ui <- navbarPage(
         ds_report_link("solar_panels_ROI_analysis", "Solar Panels ROI Analysis"),
 
         # Third Report
-        section_subtitle("Books Text Analysis", "books_text_analysis"),
+        section_subtitle("Books Text Analysis", small = "created in July 2020", "books_text_analysis"),
         p("The article discusses the analysis of a dataset containing information on books written in English and Spanish. The dataset includes the title, category, and the total count of different types of word classes in the books."),
         p("The project will create graphs to show the relationship between adjectives and verbs also a word cloud of the book titles."),
         packages_bagde(c("tidyverse", "rmarkdown", "plotly", "tidytext", "stopwords", "wordcloud2")),
