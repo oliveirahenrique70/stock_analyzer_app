@@ -3,6 +3,8 @@ library(shiny)
 library(bslib)
 library(shinyjs)
 library(fontawesome)
+library(emayili)
+library(shinyalert)
 
 # Load fucntions
 source("functions.R")
@@ -49,6 +51,7 @@ ui <- navbarPage(
       p(bullet_point(), "Develop ", pink_words("interactive apps"),
         " that allows users to explore the data in real time, generate custom reports or visualizations, and perform unique analyses."),
       p("Throughout my work, my goal is to create tools that help both experts and amateur users to interact with the data available to them."),
+
       section_title("Use Case Examples"),
       
       # Second section - DS Report
@@ -85,7 +88,7 @@ ui <- navbarPage(
                       video_thumbnail("https://www.youtube.com/embed/hDPFZeTEboE")),
                column(5,
                       about_info(),
-                      style = "padding-top: 65px")),
+                      style = "padding-top: 35px")),
       br(),
       p("Hello! 👋 I'm a 33 years old Brazilian engineer with 5 years of experience developing data science projects and getting valuable business insights to clients. My projects use data manipulation & visualization, machine learning models, statistical tests and interactive apps to get the full potential from the data."),
       p("I would love to help you get all potency from your data. Please get in touch! 🙂"),
@@ -245,6 +248,51 @@ server <- function(input, output, session) {
     updateNavbarPage(session, "navbar_page", "Apps")
   })
 
+  observeEvent(input$contact_me, {
+    showModal(modalDialog(
+      textInput("email",
+                "Enter e-mail:"),
+      textAreaInput(inputId = "message",
+                    label = "Enter message:",
+                    height = "200px",
+                    width = "300px"),
+      size = "s",
+      easyClose = TRUE,
+      footer = tagList(actionButton('submit_form', 'Submit'),
+      modalButton('Cancel')
+      )
+    ))
+  })
+
+  observeEvent(input$submit_form, {
+    if (input$email == ""){
+      shinyalert(title = "Please, add your email", type = "error")
+    } else {
+      from <- isolate(input$email)
+      msg <- isolate(input$message)
+
+      # Create email body
+      email <- envelope(
+        to = "oliveirahenrique70@gmail.com",
+        from = "oliveirahenrique70@gmail.com",
+        subject = paste0("HO Apps Contact - ", from),
+        text = msg)
+            
+      # Create smtp server port
+      smtp <- emayili::server(
+        host = "smtp.gmail.com",
+        port = 465,
+        username = "oliveirahenrique70@gmail.com",
+        password = "mkjppkgwvnfqrzfh")
+            
+      # Send email
+      smtp(email)
+            
+      shinyalert(title = "Message sent!", type = "success")
+    }
+  })
+
+  # Technologies image button
   showImage <- reactiveVal(FALSE)
   observeEvent(input$technologies_button, {
     showImage(!showImage())

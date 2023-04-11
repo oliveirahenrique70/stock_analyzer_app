@@ -17,7 +17,8 @@ about_info <- function() {
     p(fa("fas fa-at", fill = "purple", width = "2em", margin_right = "0.7em"),
       "oliveirahenrique70@gmail.com", style = "font-size: 19px; font-family: 'brandon-text'"),
     p(fa("fas fa-phone", fill = "purple", width = "2em", margin_right = "0.7em"),
-      "+55 (81) 99991-0182", style = "font-size: 19px; font-family: 'brandon-text'")
+      "+55 (81) 99991-0182", style = "font-size: 19px; font-family: 'brandon-text'"),
+    actionButton(inputId = "contact_me", class = "btn btn-lg", style = "background-color: #9933CC", label = "Contact me!")
   )
 }
 
@@ -146,7 +147,7 @@ video_thumbnail <- function(video_url) {
           tags$iframe(class = "embed-responsive-item",
                       src = video_url,
                       allowfullscreen = NA,
-                      width = "650",
+                      width = "100%",
                       height = "400")
       )
   )
