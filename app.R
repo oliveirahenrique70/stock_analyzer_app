@@ -143,11 +143,15 @@ ui <- navbarPage(
         p("In this section you can access the following interactive apps:"),
         
         # Table of Content
+        bullet_point_toc("Biodiversity Analyzer", "#biodiversity_analyzer"),
         bullet_point_toc("Stock Analyzer", "#stock_analyzer"),
         bullet_point_toc("Maritime Transport Analyzer", "#maritime_transport_analyzer"),
 
         # First App
         section_subtitle("Biodiversity Analyzer", small = "created in 2023", id = "biodiversity_analyzer"),
+        packages_bagde(c("tidyverse", "shiny", "shinyWidgets", "plotly", "DT", "leaflet")),
+        p("The app displays information about the biodiversity in Poland. Allows the user to filter the data by date range, species type (kingdom), and species name (scientific or vernacular). To display the info the app contains four tabs: a map plot, a timeline line plot, a timeline bar plot, and a data table."),
+        img_with_link("biodiversity_app.gif", "/biodiversity_analyzer/", rpubs = FALSE),
         app_link("biodiversity_analyzer", "Biodiversity Analyzer"),
 
         # Second App
