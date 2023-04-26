@@ -41,32 +41,22 @@ ui <- navbarPage(
     fluidPage(
       
       # First section - Data Potency
-      section_title("Get all Potency from your Data"),
-      p("Welcome to the HO data science consultancy webpage 🧑‍💻. Here is how I can help you extract all potency from your data:"),
-      p(bullet_point(), "Create, read, update and manipulate ", pink_words("large data"), "."),
-      p(bullet_point(), "Create clear, concise and easy-to-interpret ", pink_words("data visualization"),
+      section_title("Get the Full Potency of your Data"),
+      p("Welcome to the", pink_words("HO"), "portfolio webpage 🧑‍💻. As a data scientist, I specialize in helping you unlock the full potential of your data. Here's how I can help:"),
+      p(bullet_point(), "Efficiently handle ", pink_words("large data sets"), "through the creation, reading, updating, and manipulation of data."),
+      p(bullet_point(), "Design clear, concise and easy-to-interpret ", pink_words("data visualization"),
         " that accurately represents the data and avoids any distortions or misrepresentations."),
-      p(bullet_point(), "Build intuitive and captivating ", pink_words("data science reports"),
-        " to help you understand important insights from your data."),
-      p(bullet_point(), "Develop ", pink_words("interactive apps"),
-        " that allows users to explore the data in real time, generate custom reports or visualizations, and perform unique analyses."),
-      p("Throughout my work, my goal is to create tools that help both experts and amateur users to interact with the data available to them."),
+      p(bullet_point(), "Develop intuitive and captivating ", pink_words("data science reports"),
+        " that uncover important insights from your data."),
+      p(bullet_point(), "Build ", pink_words("interactive apps"),
+        " that enable real-time exploration of your data, generating custom reports or visualizations, and performing unique analyses."),
+      p("My goal is to create tools that facilitate data analysis for both experts and amateur users. Let's work together to get the full potential of your data."),
 
-      section_title("Use Case Examples"),
-      
-      # Second section - DS Report
-      section_subtitle("Data Science Reports", hr = FALSE),
-      p("A data science report is a document that provides a detailed analysis of a dataset using visualizations, tables, statistical analysis and machine learning techniques."),
-      p("The report typically includes a variety of visualizations, tables, and text that help to convey insights and conclusions drawn from the data. These reports can be used for a variety of purposes, such as identifying trends, predicting future outcomes, or making data-driven decisions."),
-      p(img(src="ds_report.gif", width = "80%"), align = "center"),
-      actionLink("link_to_ds_report", "Click here to access Data Science Reports portfolio"),
-      
-      # Third section - Apps
-      section_subtitle("Interactive Apps"),
-      p("An interactive app is a type of software application that allows users to interact with data or information in a dynamically."),
-      p("One of the key benefits of interactive apps is that they enable users to explore and analyze data in real time, allowing for a more in-depth understanding of the underlying trends and patterns. With interactive apps, users can filter and sort data based on specific criteria, and then generate custom reports or visualizations that highlight the most important insights."),
-      p(img(src="app.gif", width = "80%"), align = "center"),
-      actionLink("link_to_apps", "Click here to access Apps portfolio"),
+      div(align = "center",
+          h2(tags$em("What are you interested in?")),
+          actionButton("link_to_ds_report", "Data Science Reports", style="background-color: purple; font-size: 24px;  padding: 20px 40px"),
+          actionButton("link_to_apps", "Interactive Apps", style="background-color: purple; font-size: 24px;  padding: 20px 40px;")
+      ),
       br(),
 
       # Fourth section - Created by
@@ -142,7 +132,12 @@ ui <- navbarPage(
       id = "apps_portfolio",
       fluidPage(
         class = "container",
-        section_title("Interactive Apps Porfolio"),
+        section_title("Interactive Apps"),
+        
+        p("An interactive app is a type of software application that allows users to interact with data dynamically."),
+        p("One of the key benefits of interactive apps is that they enable users to explore and analyze data in real time, allowing for a more in-depth understanding of the underlying trends and patterns. With interactive apps, users can filter and sort data based on specific criteria, and then generate custom reports or visualizations that highlight the most important insights."),
+        
+        br(),
         p("In this section you can access the following interactive apps:"),
         
         # Table of Content
@@ -152,8 +147,8 @@ ui <- navbarPage(
 
         # First App
         section_subtitle("Biodiversity Analyzer", small = "created in 2023", id = "biodiversity_analyzer"),
-        packages_bagde(c("tidyverse", "shiny", "shinyWidgets", "plotly", "DT", "leaflet")),
         p("The app displays information about the biodiversity in Poland. Allows the user to filter the data by date range, species type (kingdom), and species name (scientific or vernacular). To display the info the app contains four tabs: a map plot, a timeline line plot, a timeline bar plot, and a data table."),
+        packages_bagde(c("tidyverse", "shiny", "shinyWidgets", "plotly", "DT", "leaflet")),
         img_with_link("biodiversity_app.gif", "/biodiversity_analyzer/", rpubs = FALSE),
         app_link("biodiversity_analyzer", "Biodiversity Analyzer"),
 
@@ -182,7 +177,11 @@ ui <- navbarPage(
       id = "reports_portfolio",
       fluidPage(
         class = "container",
-        section_title("Data Science Reports Porfolio"),
+        section_title("Data Science Reports"),
+        
+        p("A data science report is a document that provides a detailed analysis of a dataset using visualizations, tables, statistical analysis and machine learning techniques."),
+        p("The report typically includes a variety of visualizations, tables, and text that help to convey insights and conclusions drawn from the data. These reports can be used for a variety of purposes, such as identifying trends, predicting future outcomes, or making data-driven decisions."),
+        br(),
         p("In this section you can access the following data science reports:"),
         
         # Table of Content
