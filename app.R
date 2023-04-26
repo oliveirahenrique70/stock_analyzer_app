@@ -43,9 +43,7 @@ ui <- navbarPage(
       # First section - Data Potency
       section_title("Get the Full Potency of your Data"),
       p("Welcome to the", pink_words("HO"), "portfolio webpage 🧑‍💻. As a data scientist, I specialize in helping you unlock the full potential of your data. Here's how I can help:"),
-      p(bullet_point(), "Efficiently handle ", pink_words("large data sets"), "through the creation, reading, updating, and manipulation of data."),
-      p(bullet_point(), "Design clear, concise and easy-to-interpret ", pink_words("data visualization"),
-        " that accurately represents the data and avoids any distortions or misrepresentations."),
+      p(bullet_point(), "Efficiently handle ", pink_words("large data sets"), "and", "design clear, concise and easy-to-interpret ", pink_words("data visualization"), "."),
       p(bullet_point(), "Develop intuitive and captivating ", pink_words("data science reports"),
         " that uncover important insights from your data."),
       p(bullet_point(), "Build ", pink_words("interactive apps"),
