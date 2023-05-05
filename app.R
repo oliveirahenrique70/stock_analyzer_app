@@ -131,13 +131,11 @@ ui <- navbarPage(
       fluidPage(
         class = "container",
         section_title("Interactive Apps"),
-        
         p("An interactive app is a type of software application that allows users to interact with data dynamically."),
         p("One of the key benefits of interactive apps is that they enable users to explore and analyze data in real time, allowing for a more in-depth understanding of the underlying trends and patterns. With interactive apps, users can filter and sort data based on specific criteria, and then generate custom reports or visualizations that highlight the most important insights."),
-        
         br(),
-        p(tags$em(tags$strong("Table of Content:"))),
-        
+        p(tags$em(tags$strong("Table of Contents:"))),
+
         # Table of Content
         bullet_point_toc("Biodiversity Analyzer", "#biodiversity_analyzer"),
         bullet_point_toc("Stock Analyzer", "#stock_analyzer"),
@@ -148,7 +146,6 @@ ui <- navbarPage(
         p("The app displays information about the biodiversity in Poland. Allows the user to filter the data by date range, species type (kingdom), and species name (scientific or vernacular). To display the info the app contains four tabs: a map plot, a timeline line plot, a timeline bar plot, and a data table."),
         packages_bagde(c("tidyverse", "shiny", "shinyWidgets", "plotly", "DT", "leaflet")),
         img_with_link("biodiversity_app.gif", "/biodiversity_analyzer/", rpubs = FALSE),
-        #p(app_link("biodiversity_analyzer", "Biodiversity Analyzer")),
         app_link_buttons("biodiversity_analyzer", "biodiversity-info-app", github = T),
 
         # Second App
@@ -156,15 +153,14 @@ ui <- navbarPage(
         p("A financial app for analyzing trends in your favourite SP 500 stocks. The app uses an API to get the stock data and allows users to analyze and visualize stock data. Users can customize settings such as moving averages and analysis time windows. Furthermore, users can also add or remove favorite stocks and view the corresponding plots"),
         packages_bagde(c("tidyverse", "tidyquant", "shiny", "shinyWidgets", "plotly", "shinyjs")),
         img_with_link("app.gif", "/stock_analyzer_local_data/", rpubs = FALSE),
-        #app_link("stock_analyzer_local_data", "Stock Analyzer"),
         app_link_buttons("stock_analyzer_local_data"),
-        
+
         # Third App
         section_subtitle("Maritime Transport Analyzer", small = "created in 2020", id = "maritime_transport_analyzer"),
         p("The app reads in a dataset with maritime transport information, and creates a table and an interactive map graph of the data. The user interface includes value boxes, ship data filters. The server allows for reactive data inputs"),
         packages_bagde(c("tidyverse", "shiny", "shinydashboard", "leaflet", "DT")),
         img_with_link("marine_app.gif", "/marine_analyzer/", rpubs = FALSE),
-        app_link("marine_analyzer", "Maritime Transport Analyzer"),
+        app_link_buttons("marine_analyzer"),
   
         created_by_msg()
       )
@@ -178,12 +174,11 @@ ui <- navbarPage(
       fluidPage(
         class = "container",
         section_title("Data Science Reports"),
-        
         p("A data science report is a document that provides a detailed analysis of a dataset using visualizations, tables, statistical analysis and machine learning techniques."),
         p("The report typically includes a variety of visualizations, tables, and text that help to convey insights and conclusions drawn from the data. These reports can be used for a variety of purposes, such as identifying trends, predicting future outcomes, or making data-driven decisions."),
         br(),
-        p("In this section you can access the following data science reports:"),
-        
+        p(tags$em(tags$strong("Table of Contents:"))),
+
         # Table of Content
         bullet_point_toc("Pooling Data Analysis", "#pooling_data_analysis"),
         bullet_point_toc("Solar Panels ROI Analysis", "#solar_panels_roi_analysis"),
@@ -238,11 +233,7 @@ ui <- navbarPage(
 )
 
 server <- function(input, output, session) {
-    
-  observeEvent(input$button_biodiversity_analyzer_git, {
-      session$sendCustomMessage(type = "redirect", message = "https://github.com/oliveirahenrique70/biodiversity-info-app")
-  })
-    
+
   # Link to reports and apps portfolio
   observeEvent(input$link_to_ds_report, {
     updateNavbarPage(session, "navbar_page", "Reports")

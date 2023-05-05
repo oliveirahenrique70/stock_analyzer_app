@@ -18,14 +18,6 @@ app_link_buttons <- function(app_name, git_link = "", github = FALSE) {
   }
 }
 
-app_link <- function(dir, name) {
-  tags$a(
-    target = "_blank",
-    href = paste0("/", dir, "/"),
-    paste0("Click here to access ", name ," app")
-  )
-}
-
 about_info <- function() {
   tagList(
     p(fa("fas fa-lightbulb", fill = "purple", width = "1.7em", margin_right = "1em"),
