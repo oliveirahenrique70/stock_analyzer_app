@@ -136,7 +136,7 @@ ui <- navbarPage(
         p("One of the key benefits of interactive apps is that they enable users to explore and analyze data in real time, allowing for a more in-depth understanding of the underlying trends and patterns. With interactive apps, users can filter and sort data based on specific criteria, and then generate custom reports or visualizations that highlight the most important insights."),
         
         br(),
-        p("In this section you can access the following interactive apps:"),
+        p(tags$em(tags$strong("Table of Content:"))),
         
         # Table of Content
         bullet_point_toc("Biodiversity Analyzer", "#biodiversity_analyzer"),
@@ -148,15 +148,17 @@ ui <- navbarPage(
         p("The app displays information about the biodiversity in Poland. Allows the user to filter the data by date range, species type (kingdom), and species name (scientific or vernacular). To display the info the app contains four tabs: a map plot, a timeline line plot, a timeline bar plot, and a data table."),
         packages_bagde(c("tidyverse", "shiny", "shinyWidgets", "plotly", "DT", "leaflet")),
         img_with_link("biodiversity_app.gif", "/biodiversity_analyzer/", rpubs = FALSE),
-        app_link("biodiversity_analyzer", "Biodiversity Analyzer"),
+        #p(app_link("biodiversity_analyzer", "Biodiversity Analyzer")),
+        app_link_buttons("biodiversity_analyzer", "biodiversity-info-app", github = T),
 
         # Second App
         section_subtitle("Stock Analyzer", small = "created in 2022", id = "stock_analyzer"),
         p("A financial app for analyzing trends in your favourite SP 500 stocks. The app uses an API to get the stock data and allows users to analyze and visualize stock data. Users can customize settings such as moving averages and analysis time windows. Furthermore, users can also add or remove favorite stocks and view the corresponding plots"),
         packages_bagde(c("tidyverse", "tidyquant", "shiny", "shinyWidgets", "plotly", "shinyjs")),
         img_with_link("app.gif", "/stock_analyzer_local_data/", rpubs = FALSE),
-        app_link("stock_analyzer_local_data", "Stock Analyzer"),
-
+        #app_link("stock_analyzer_local_data", "Stock Analyzer"),
+        app_link_buttons("stock_analyzer_local_data"),
+        
         # Third App
         section_subtitle("Maritime Transport Analyzer", small = "created in 2020", id = "maritime_transport_analyzer"),
         p("The app reads in a dataset with maritime transport information, and creates a table and an interactive map graph of the data. The user interface includes value boxes, ship data filters. The server allows for reactive data inputs"),
@@ -193,7 +195,7 @@ ui <- navbarPage(
         p("The project tasks include candidates image comparison, ballot results according to candidate A image, voters demographics data analysis, and a significance test between ballot results and voters age."),
         packages_bagde(c("tidyverse", "rmarkdown", "plotly", "kableExtra")),
         img_with_link("polling_data_analysis.gif", "PollingDataAnalisys", rpubs = TRUE),
-        ds_report_link("PollingDataAnalisys", "Pooling Data Analysis"),
+        ds_report_link("PollingDataAnalisys"),
 
         # Second Report
         section_subtitle("Solar Panels ROI Analysis", small = "created in October 2022", id = "solar_panels_roi_analysis"),
@@ -201,7 +203,7 @@ ui <- navbarPage(
         p("The ROI score value will be calculated using a formula that includes electricity price increase, system cost per watt, and solar radiation, to determine which U.S.A. state has the highest ROI."),
         packages_bagde(c("tidyverse", "rmarkdown", "plotly", "DT", "htmltools")),
         img_with_link("solar_panel_ROI_analysis.gif", "solar_panels_ROI_analysis", rpubs = TRUE),
-        ds_report_link("solar_panels_ROI_analysis", "Solar Panels ROI Analysis"),
+        ds_report_link("solar_panels_ROI_analysis"),
 
         # Third Report
         section_subtitle("Books Text Analysis", small = "created in July 2020", "books_text_analysis"),
@@ -209,7 +211,7 @@ ui <- navbarPage(
         p("The project will create graphs to show the relationship between adjectives and verbs also a word cloud of the book titles."),
         packages_bagde(c("tidyverse", "rmarkdown", "plotly", "tidytext", "stopwords", "wordcloud2")),
         img_with_link("ds_report.gif", "text_analysis", rpubs = TRUE),
-        ds_report_link("text_analysis", "Books Text Analysis"),
+        ds_report_link("text_analysis"),
 
         created_by_msg()
       )
@@ -236,7 +238,11 @@ ui <- navbarPage(
 )
 
 server <- function(input, output, session) {
-  
+    
+  observeEvent(input$button_biodiversity_analyzer_git, {
+      session$sendCustomMessage(type = "redirect", message = "https://github.com/oliveirahenrique70/biodiversity-info-app")
+  })
+    
   # Link to reports and apps portfolio
   observeEvent(input$link_to_ds_report, {
     updateNavbarPage(session, "navbar_page", "Reports")

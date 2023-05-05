@@ -1,3 +1,23 @@
+app_link_buttons <- function(app_name, git_link = "", github = FALSE) {
+  if (github) {
+    div(a(target = "_blank",
+          href = paste0("/", app_name, "/"),
+          class = "btn btn-primary",
+          "Click to Access App"),
+        a(target = "_blank",
+          href = paste0("https://github.com/oliveirahenrique70/", git_link),
+          class = "btn btn-secondary",
+          "Click to Access Apps GitHub"),
+        align = "center")
+  } else {
+    div(a(target = "_blank",
+          href = paste0("/", app_name, "/"),
+          class = "btn btn-primary",
+          "Click to Access App"),
+        align = "center")
+  }
+}
+
 app_link <- function(dir, name) {
   tags$a(
     target = "_blank",
@@ -53,12 +73,12 @@ created_by_msg <- function() {
   )
 }
 
-ds_report_link <- function(link, name) {
-  tags$a(
-    target = "_blank",
-    href = paste0("https://rpubs.com/oliveirahenrique70/", link),
-    paste0("Click here to access ", name ," report")
-  )
+ds_report_link <- function(link) {
+  div(a(target = "_blank",
+        href = paste0("https://rpubs.com/oliveirahenrique70/", link),
+        class = "btn btn-primary",
+        paste0("Click to Access Report")),
+      align = "center")
 }
 
 feedback_msg <- function(text, author, link) {
