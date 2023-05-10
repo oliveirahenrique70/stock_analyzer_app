@@ -42,8 +42,8 @@ ui <- navbarPage(
       
       # First section - Data Potency
       section_title("Get the Full Potency of your Data"),
-      p("Welcome to the", pink_words("HO"), "portfolio webpage 🧑‍💻. As a data scientist, I specialize in helping you unlock the full potential of your data. Here's how I can help:"),
-      p(bullet_point(), "Efficiently handle ", pink_words("large data sets"), "and", "design clear, concise and easy-to-interpret ", pink_words("data visualization"), "."),
+      p("Welcome to the", pink_words("HO"), "portfolio webpage 🧑‍💻, where you can unlock the full potential of your data. As a data scientist, my goal is to help you get the most out of your information. Here's how I can help:"),
+      p(bullet_point(), "Efficiently handle ", pink_words("large data sets"), ",", "create easy-to-interpret ", pink_words("data visualization"), ", and construct efficient", pink_words("machine learning models"), "."),
       p(bullet_point(), "Develop intuitive and captivating ", pink_words("data science reports"),
         " that uncover important insights from your data."),
       p(bullet_point(), "Build ", pink_words("interactive apps"),
@@ -51,7 +51,7 @@ ui <- navbarPage(
       p("My goal is to create tools that facilitate data analysis for both experts and amateur users. Let's work together to get the full potential of your data."),
 
       div(align = "center",
-          h2(tags$em("What are you interested in?")),
+          h2(tags$em("What porfolio are you interested in?")),
           actionButton("link_to_ds_report", "Data Science Reports", style="background-color: purple; font-size: 24px;  padding: 20px 40px"),
           actionButton("link_to_apps", "Interactive Apps", style="background-color: purple; font-size: 24px;  padding: 20px 40px;")
       ),
@@ -78,8 +78,8 @@ ui <- navbarPage(
                       about_info(),
                       style = "padding-top: 35px")),
       br(),
-      p("Hello! 👋 I'm a 33 years old Brazilian engineer with 5 years of experience developing data science projects and getting valuable business insights to clients. My projects use data manipulation & visualization, machine learning models, statistical tests and interactive apps to get the full potential from the data."),
-      p("I would love to help you get all potency from your data. Please get in touch! 🙂"),
+      p("Greetings! 🤝 As a skilled Brazilian engineer with 5 years of expertise in developing data science projects and providing valuable business insights to clients, I am here to help you unleash the full potential of your data."),
+      p("Through my proficiency in data manipulation, visualization, machine learning models, statistical tests and interactive apps, I can assist you in optimizing your data and obtain important business insigths. Don't hesitate to contact me to get the best out of your data! 🙂"),
 
       # Technologies
       actionButton("technologies_button", HTML("&nbsp;&nbsp; Show Technologies"), icon = icon("chevron-down")),
