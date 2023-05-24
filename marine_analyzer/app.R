@@ -77,12 +77,12 @@ sidebar <- dashboardSidebar(#expandOnHover = FALSE,
              tabName = "portfolio_analysis",
              icon = icon("chart-pie")),
     
-    tags$div(style = "height: 100px;"),
+    tags$div(style = "height: 50px;"),
     
     h5(tags$strong("Select Stock:"), align = "center", style = "color: #FF50CA;"),
     select_stock("stock_code", stocks_data),
     
-    tags$div(style = "height: 150px;"),
+    tags$div(style = "height: 100px;"),
     
     created_by_msg(sidebar = TRUE)
   ))
@@ -138,7 +138,7 @@ body <- dashboardBody(tabItems(
           sidebarLayout(
             # Stock inputs
             sidebarPanel(
-              width = 3,
+              width = 4,
               style = "margin-right: 100px;",
               numericInput("new_quantity", "Quantity", value = 0),
               porfolio_buttons(),
