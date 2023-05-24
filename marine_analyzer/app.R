@@ -1,193 +1,284 @@
-# Appsilon App
-# Oct 2020
-# MAde by Henrique Oliveira
+#### Intro ####
+# Made by Henrique Oliveira
+# May 2023
 
-# Load packages
-library(lubridate)
-library(leaflet)
+# t <- lapply(portfolio_stocks$code, get_stock_data, period = "1mo")
+# tt = lapply(t, function(x) var(x[["adj_close"]]))
+# 
+# portfolio_stats <- data.frame(
+#   'price' = unlist(lapply(t, function(x) tail(x[["close"]], 1))),
+#   'variance' = unlist(lapply(t, function(x) round(var(x[["adj_close"]]), 2)))
+# )
+
+# Load R packages
+library(fresh)
 library(tidyverse)
-library(DT)
 library(shiny)
-library(shinythemes)
-library(shinydashboard)
 library(shinyWidgets)
+library(DT)
+library(bs4Dash)
+library(plotly)
+library(fontawesome)
+library(yahoofinancer)
+library(tidyquant)
 
-# Read dataset
-df <- read_csv('www/ShipsAppData.csv')
+source("functions.R")
 
-# Set arrival and departure
-df$TYPE <- rep(c('arrival','departure'), nrow(df)/2)
+# create a sample data frame
+portfolio_stocks <- data.frame(
+  code = c("VGIR11", "HGBS11", "BRCO11", "HGRU11"),
+  quantity = c(425, 200, 100, 100),
+  stringsAsFactors = FALSE
+)
 
-# Set colors for graph 
-df$LEGEND <- rep(c('red', 'green'), nrow(df)/2)
+stocks_data <- read_csv("www/FI.csv")
 
-# Create table dataframe
-dfTable <-
-    data.frame(
-        'Type' = df$ship_type[seq(2,nrow(df),2)],
-        'Name' = df$SHIPNAME[seq(2,nrow(df),2)],
-        'Departure' = as.character(df$DATETIME[df$TYPE == 'departure']),
-        'Arrival' = as.character(df$DATETIME[df$TYPE == 'arrival']),
-        'Time' = df$TIME[!is.na(df$TIME)],
-        'Distance' = round(df$DISTANCE[!is.na(df$DISTANCE)], 0)
-    )
+# Join data
+portfolio_stocks <- portfolio_stocks %>%
+  join_portfolio_data(stocks_data)
 
-# Define User Interface
-ui <- fluidPage(
-    
-    # Set shinyapp theme
-    theme = shinytheme("cyborg"),
-    
-    # Set tag style
-    tags$head(tags$style(HTML("hr {border-top: 0.5px solid #C0C0C0;}"))),
-    
-    # First row 
-    fluidRow(
-        
-        tags$style(HTML("div.row {background-color: #000000;}")),
-        
-        # Add image
-        column(tags$img(src="HO.png", height=80, width=110), 
-               width = 1,
-               offset = 0),
-        
-        # Add App title
-        column(h1(HTML("<em> Maritime Transport Analyzer App </em>")),
-               align = 'center',
-               width = 7,
-               offset = 1)),
-    
-    # Add horizontal line
-    tags$hr(),
-    
-    # Initiate shinydashboard
-    useShinydashboard(),
-    
-    # Second row 
-    fluidRow(
-        
-        # Values boxes 
-        valueBoxOutput("distance", width = 3), 
-        valueBoxOutput("time", width = 3),
-        valueBoxOutput("departure", width = 3),
-        valueBoxOutput("arrival", width = 3)),  
+#### Dashboard Header ####
+header <- dashboardHeader(
+  status = "secondary",
+  tags$li(
+    a(
+      href = 'https://apps.hodatascience.com.br/',
+      img(
+        src = 'HO.gif',
+        title = "Company Home",
+        height = "70px"
+      ),
+      style = "padding-top:10px; padding-bottom:10px"
+    ),
+    class = "dropdown"
+  ),
+  h2("Real Estate Stocks Analyzer",
+     style = "padding-left: 300px; font-style: italic; color: white")
+)
 
-    # Third row 
-    fluidRow(
-        
-        # Plot graph    
-        column(leafletOutput("plot", height = 455, width = 1500),
-               width = 12)),
+#### Dashboard Sidebar ####
+sidebar <- dashboardSidebar(#expandOnHover = FALSE,
+  minified = FALSE,
+  
+  sidebarMenu(
+    menuItem("Intro",
+             tabName = "intro",
+             icon = icon("cog")),
+    menuItem("Stock Plot",
+             tabName = "stocks_analysis",
+             icon = icon("chart-line")),
+    menuItem("Stock Data Table",
+             tabName = "stocks_data_table",
+             icon = icon("table")),
+    menuItem("Set Portfolio",
+             tabName = "portfolio",
+             icon = icon("list")),
+    menuItem("Portfolio Analysis",
+             tabName = "portfolio_analysis",
+             icon = icon("chart-pie")),
     
-    # Fourth row
-    fluidRow(
-        
-        # Add space
-        br(),
-        
-        # Add ship type filter
-        column(selectInput("type",
-                       "Select Ship Type:",
-                       unique(df$ship_type)),
-           width =2),
+    tags$div(style = "height: 100px;"),
     
+    h5(tags$strong("Select Stock:"), align = "center", style = "color: #FF50CA;"),
+    select_stock("stock_code", stocks_data),
     
-        # Add ship name filter
-        column(selectInput("name",
-                       "Select Ship Name:",
-                       NA),
-           width = 2)),
+    tags$div(style = "height: 150px;"),
     
-    # Add horizontal line
-    tags$hr(),
-    
-    # Fifth row
-    fluidRow(
-        
-        # Create table
-        column(DTOutput("table"),
-                  width = 12))
-    
-    ) # Close UI
+    created_by_msg(sidebar = TRUE)
+  ))
 
-# Define server 
+#### Dashboard Body ####
+body <- dashboardBody(tabItems(
+
+  #### Intro Tab ####
+  tabItem(tabName = "intro",
+          fluidPage(
+            p(h4("Welcome to the", tags$strong("Real Estate Stocks Analyzer"), " app.")),
+            p(h4("This app allows users to analyze brazilian real estate stocks and manage their stocks portfolio. The app integrates various R packages such as ", tags$em("shiny"),", ", tags$em("bs4Dash"), ", ", tags$em("plotly"), ", ", tags$em("DT"), ", ", tags$em("yahoofinancer"), " and others.")),
+            p(h4("Interact with the app's sidebar tabs to define what you want to analyze. Also in the sidebar of the app, use the stock selectize filter to select the stock you want to analyze.")),
+            p(h4("Visit the website ", pink_words("apps.hodatascience.com.br", link = "https://apps.hodatascience.com.br/") , "for more apps like this, to know more about the app creator or to check out interesting data science reports projects")),
+            br(),
+            created_by_msg()
+          )),
+
+  #### Stocks Analysis Tab####
+  tabItem(tabName = "stocks_analysis",
+          fluidRow(
+            column(
+              offset = 1,
+              width = 5,
+              stock_analysis_period("plot_analysis_period"),
+            ),
+            column(
+              offset = 1,
+              width = 5,
+              mavg_slider("mavg_period")
+            )
+          ),
+          fluidRow(
+            card_UI(
+              plotlyOutput("stock_analysis"),
+              "Stocks Data Visualization Analysis",
+              width = 12,
+              height = 550
+            )
+          )
+  ),
+
+  #### Stocks Data Table Tab ####
+  tabItem(tabName = "stocks_data_table",
+          card_UI(table_UI("stocks_table"),
+                  "Stocks Data Table",
+                  width = 12,
+                  height = NULL)
+  ),
+
+  #### Set Portfolio Tab ####
+  tabItem(tabName = "portfolio",
+          sidebarLayout(
+            # Stock inputs
+            sidebarPanel(
+              width = 3,
+              style = "margin-right: 100px;",
+              numericInput("new_quantity", "Quantity", value = 0),
+              porfolio_buttons(),
+            ),
+            # Stocks output
+            mainPanel(
+              card_UI(
+                table_UI("portfolio_table"),
+                "Stocks Porfolio Data",
+                width = 12,
+                height = NULL
+              )
+            )
+          )
+  ),
+
+  #### Portfolio Analysis Plot Tab ####
+  tabItem(tabName = "portfolio_analysis",
+          fluidPage(
+            fluidRow(
+            card_UI(plotlyOutput("portfolio_price"),
+                    "Portfolio Stats",
+                    width = 6),
+            card_UI(plotlyOutput("portfolio_quantity"),
+                    "Portfolio Quantity",
+                    width = 6)
+            )
+          ))
+))
+
+# Create ui dashboardPage (front-end)
+ui <- dashboardPage(freshTheme = bs4_theme() ,
+                    dark = NULL,
+                    header,
+                    sidebar,
+                    body)
+
+# Server
 server <- function(input, output, session) {
+
+  #### Reactive Data ####
+
+  portfolio_df <- reactiveVal(
+    get_price_var(portfolio_stocks))
+
+  stocks_df <- reactive({
+    df <- get_stock_data(input$stock_code, "2y")
+    df
+  })
+
+  # Stock data for plot
+  stocks_analysis_df <- reactive({
+    init_date <- tail(stocks_df()[["date"]], 1)
+
+    df <- stocks_df() %>%
+      filter(date >= init_date - days(input$plot_analysis_period))
+    df
+  })
+
+  # Stock data for table
+  stocks_table_df <- reactive({
+    df <- stocks_df() %>%
+      arrange(desc(date)) %>%
+      mutate(date = as.Date(date)) %>%
+      mutate_if(is.numeric, ~ round(., 2))
+    df <- cbind(code = input$stock_code, df)
+    df
+  })
+
+  portfolio_stats_df <- reactive({
+    df <- portfolio_df() %>% portfolio_stats()
+    df
+  })
+
+  #### Add Stock ####
+  observeEvent(input$add_stock, {
+    if (input$stock_code != "" && input$new_quantity > 0 && input$stock_code %in% portfolio_df()$code == FALSE) {
+      new_row <- data.frame(
+        code = input$stock_code,
+        quantity = input$new_quantity,
+        stringsAsFactors = FALSE
+      ) %>%
+        join_portfolio_data(stocks_data)
+
+      stocks_add <- rbind(portfolio_df(), get_price_var(new_row))
+      portfolio_df(stocks_add)
+    }
+  })
+
+  #### Remove Stock ####
+  observeEvent(input$remove_stock, {
+    if (input$stock_code != "") {
+      stocks_delete <-
+        portfolio_df()[portfolio_df()$code != input$stock_code,]
+      portfolio_df(stocks_delete)
+    }
+  })
+
+  #### Update Stock ####
+  observeEvent(input$update_stock, {
+    if (input$stock_code != "" && input$new_quantity > 0) {
+      index <- which(portfolio_df()$code == input$stock_code)
+      if (length(index) > 0) {
+        stocks_update <- portfolio_df()
+        stocks_update$quantity[index] <- input$new_quantity
+        portfolio_df(stocks_update)
+      }
+    }
     
-    # Create reactive graph data
-    dataInput <- reactive({ if (input$name == 'All'){
-                            dataInput <- df %>%
-                            filter(ship_type == input$type)
-                            } else {
-                            dataInput <- df %>%
-                            filter(ship_type == input$type) %>%
-                            filter(SHIPNAME == input$name)
-    }})
-    
-    # Create reactive table data
-    dataTableInput <- reactive({if (input$name == 'All'){
-                            dataInput <- dfTable %>%
-                            filter(Type == input$type)
-                            } else {
-                            dataInput <- dfTable %>%
-                            filter(Type == input$type) %>%
-                            filter(Name == input$name)
-    }})
-    
-    # Box values output
-    output$distance <- renderValueBox({valueBox(formatC(sum(dataTableInput()$Distance),format="f", big.mark = ",", digits=0), 
-                                                "Distance in Meters", 
-                                                icon = icon("road", 
-                                                lib = "glyphicon"),
-                                                color = "fuchsia")
-    })
-    output$time <- renderValueBox({valueBox(formatC(sum(dataTableInput()$Time),format="f", big.mark = ",", digits=0), 
-                                                "Time in Seconds", 
-                                                icon = icon("time", 
-                                                lib = "glyphicon"),
-                                                color = "fuchsia")
-    })
-    output$departure <- renderValueBox({valueBox(min(date(dataTableInput()$Departure)), 
-                                            "Departure Date", 
-                                            icon = icon("calendar", 
-                                            lib = "glyphicon"),
-                                            color = "purple")
-    })
-    output$arrival <- renderValueBox({valueBox(max(date(dataTableInput()$Arrival)), 
-                                                 "Arrival Date", 
-                                                 icon = icon("calendar", 
-                                                 lib = "glyphicon"),
-                                                 color = "purple")
-    })
-    
-    # Make filter reactive
-    filterType <- reactive({
-                    df %>% 
-                    filter(ship_type == input$type) %>%
-                    pull(SHIPNAME)})
-    observe({updateSelectizeInput(session, "name", choices = c('All',filterType()))})
-    
-    # Plot graph
-    output$plot <- renderLeaflet({
-    plot <- leaflet(dataInput()) %>%
-            addTiles() %>%
-            addCircleMarkers(color = ~ LEGEND,
-                             popup  = ~ SHIPNAME) %>%
-            addLegend(colors = c('green','red'), 
-                      labels = c('Departure','Arrival'))
-    
-    # Loop to plot line connecting observations
-    for (i in unique(dataInput()$SHIPNAME)) {
-    plot <- plot %>%
-            addPolylines(data = dataInput()[dataInput()$SHIPNAME == i, ],
-                         lng = ~ LON,
-                         lat = ~ LAT,
-                         color = 'grey')}
-    
-    plot})
-    
-    # Plot table
-    output$table <- renderDataTable(dataTableInput(), rownames= FALSE)
+    #print(modifiedData())
+  })
+
+  #### Render Table ####
+  table_server("portfolio_table",
+               portfolio_df,
+               reactivity = TRUE,
+               paging = FALSE,
+               search = FALSE
+  )
+  table_server("stocks_table",
+               stocks_table_df,
+               reactivity = TRUE
+  )
+  table_server("portfolio_stats",
+               portfolio_stats_df,
+               ordering = FALSE,
+               row_names = TRUE,
+               reactivity = TRUE,
+               search = FALSE,
+               paging = FALSE
+  )
+
+  #### Render Plots ####
+  output$portfolio_price <-
+    renderPlotly(bar_plot(portfolio_df()))
+  output$portfolio_quantity <-
+    renderPlotly(pie_plot(portfolio_df()))
+  output$stock_analysis <-
+    renderPlotly(stock_plot(stocks_analysis_df(), input$mavg_period, input$stock_code))
 }
 
-# Run the App 
-shinyApp(ui = ui, server = server)
+# Run App
+shinyApp(ui, server)
