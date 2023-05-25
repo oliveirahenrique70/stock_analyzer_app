@@ -2,14 +2,6 @@
 # Made by Henrique Oliveira
 # May 2023
 
-# t <- lapply(portfolio_stocks$code, get_stock_data, period = "1mo")
-# tt = lapply(t, function(x) var(x[["adj_close"]]))
-# 
-# portfolio_stats <- data.frame(
-#   'price' = unlist(lapply(t, function(x) tail(x[["close"]], 1))),
-#   'variance' = unlist(lapply(t, function(x) round(var(x[["adj_close"]]), 2)))
-# )
-
 # Load R packages
 library(fresh)
 library(tidyverse)
@@ -52,7 +44,7 @@ header <- dashboardHeader(
     ),
     class = "dropdown"
   ),
-  h2("Real Estate Stocks Analyzer",
+  h2("Real Estate Stock Analyzer",
      style = "padding-left: 300px; font-style: italic; color: white")
 )
 

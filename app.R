@@ -137,31 +137,31 @@ ui <- navbarPage(
         p(tags$em(tags$strong("Table of Contents:"))),
 
         # Table of Content
+        bullet_point_toc("Real Estate Stock Analyzer", "#real_estate_stock_analyzer"),
         bullet_point_toc("Biodiversity Analyzer", "#biodiversity_analyzer"),
         bullet_point_toc("Stock Analyzer", "#stock_analyzer"),
-        bullet_point_toc("Maritime Transport Analyzer", "#maritime_transport_analyzer"),
 
         # First App
-        section_subtitle("Biodiversity Analyzer", small = "created in 2023", id = "biodiversity_analyzer"),
-        p("The app displays information about the biodiversity in Poland. Allows the user to filter the data by date range, species type (kingdom), and species name (scientific or vernacular). To display the info the app contains four tabs: a map plot, a timeline line plot, a timeline bar plot, and a data table."),
-        packages_bagde(c("tidyverse", "shiny", "shinyWidgets", "plotly", "DT", "leaflet")),
-        img_with_link("biodiversity_app.gif", "/biodiversity_analyzer/", rpubs = FALSE),
-        app_link_buttons("biodiversity_analyzer", "biodiversity-info-app", github = T),
+        section_subtitle("Real Estate Stock Analyzer", small = "created in May 2023", id = "real_estate_stock_analyzer"),
+        p("The app allows users to analyze Brazilian real estate stocks and manage their stock portfolio. The app contains interactive plots and a table of the available stock data. Furthermore, the user can add stocks to a portfolio by specifying the stock code and quantity."),
+        packages_bagde(c("tidyverse", "shiny", "yahoofinancer", "bs4Dash", "DT", "fontawesome")),
+        img_with_link("real_estate_stocks_analyzer_app.png", "/marine_analyzer/", rpubs = FALSE),
+        app_link_buttons("marine_analyzer"),
 
         # Second App
-        section_subtitle("Stock Analyzer", small = "created in 2022", id = "stock_analyzer"),
-        p("A financial app for analyzing trends in your favourite SP 500 stocks. The app uses an API to get the stock data and allows users to analyze and visualize stock data. Users can customize settings such as moving averages and analysis time windows. Furthermore, users can also add or remove favorite stocks and view the corresponding plots"),
-        packages_bagde(c("tidyverse", "tidyquant", "shiny", "shinyWidgets", "plotly", "shinyjs")),
-        img_with_link("app.gif", "/stock_analyzer_local_data/", rpubs = FALSE),
-        app_link_buttons("stock_analyzer_local_data"),
+        section_subtitle("Biodiversity Analyzer", small = "created in January 2023", id = "biodiversity_analyzer"),
+        p("The app displays information about the biodiversity in Poland. Allows the user to filter the data by date range, species type (kingdom), and species name (scientific or vernacular). To display the info the app contains four tabs: a map plot, a timeline line plot, a timeline bar plot, and a data table."),
+        packages_bagde(c("tidyverse", "shiny", "shinyWidgets", "plotly", "DT", "leaflet")),
+        img_with_link("biodiversity_app.png", "/biodiversity_analyzer/", rpubs = FALSE),
+        app_link_buttons("biodiversity_analyzer", "biodiversity-info-app", github = T),
 
         # Third App
-        section_subtitle("Maritime Transport Analyzer", small = "created in 2020", id = "maritime_transport_analyzer"),
-        p("The app reads in a dataset with maritime transport information, and creates a table and an interactive map graph of the data. The user interface includes value boxes, ship data filters. The server allows for reactive data inputs"),
-        packages_bagde(c("tidyverse", "shiny", "shinydashboard", "leaflet", "DT")),
-        img_with_link("marine_app.gif", "/marine_analyzer/", rpubs = FALSE),
-        app_link_buttons("marine_analyzer"),
-  
+        section_subtitle("Stock Analyzer", small = "created in July 2022", id = "stock_analyzer"),
+        p("A financial app for analyzing trends in your favourite SP 500 stocks. The app uses an API to get the stock data and allows users to analyze and visualize stock data. Users can customize settings such as moving averages and analysis time windows. Furthermore, users can also add or remove favorite stocks."),
+        packages_bagde(c("tidyverse", "tidyquant", "shiny", "shinyWidgets", "plotly", "shinyjs")),
+        img_with_link("stocks_analyzer_app.png", "/stock_analyzer_local_data/", rpubs = FALSE),
+        app_link_buttons("stock_analyzer_local_data"),
+
         created_by_msg()
       )
     ),
@@ -187,25 +187,22 @@ ui <- navbarPage(
         # First Report
         section_subtitle("Pooling Data Analysis", small = "created in July 2020", id = "pooling_data_analysis"),
         p("This report analyzes a polling dataset that includes information on two election candidates, their images, ballot results and voters' demographics data."),
-        p("The project tasks include candidates image comparison, ballot results according to candidate A image, voters demographics data analysis, and a significance test between ballot results and voters age."),
         packages_bagde(c("tidyverse", "rmarkdown", "plotly", "kableExtra")),
-        img_with_link("polling_data_analysis.gif", "PollingDataAnalisys", rpubs = TRUE),
+        img_with_link("ds_polling_data_analysis.png", "PollingDataAnalisys", rpubs = TRUE),
         ds_report_link("PollingDataAnalisys"),
 
         # Second Report
         section_subtitle("Solar Panels ROI Analysis", small = "created in October 2022", id = "solar_panels_roi_analysis"),
         p("The project objective is to analyzes Solar Panels Return on Investment (ROI) in U.S.A. states, which is calculated by considering the investment cost, the money saved on energy, the money made by selling extra energy, and the incentives of federal/state tax credits."),
-        p("The ROI score value will be calculated using a formula that includes electricity price increase, system cost per watt, and solar radiation, to determine which U.S.A. state has the highest ROI."),
         packages_bagde(c("tidyverse", "rmarkdown", "plotly", "DT", "htmltools")),
-        img_with_link("solar_panel_ROI_analysis.gif", "solar_panels_ROI_analysis", rpubs = TRUE),
+        img_with_link("ds_solar_panel_analysis.png", "solar_panels_ROI_analysis", rpubs = TRUE),
         ds_report_link("solar_panels_ROI_analysis"),
 
         # Third Report
         section_subtitle("Books Text Analysis", small = "created in July 2020", "books_text_analysis"),
         p("The article discusses the analysis of a dataset containing information on books written in English and Spanish. The dataset includes the title, category, and the total count of different types of word classes in the books."),
-        p("The project will create graphs to show the relationship between adjectives and verbs also a word cloud of the book titles."),
         packages_bagde(c("tidyverse", "rmarkdown", "plotly", "tidytext", "stopwords", "wordcloud2")),
-        img_with_link("ds_report.gif", "text_analysis", rpubs = TRUE),
+        img_with_link("ds_text_analysis.png", "text_analysis", rpubs = TRUE),
         ds_report_link("text_analysis"),
 
         created_by_msg()

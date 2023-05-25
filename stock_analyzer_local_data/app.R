@@ -327,7 +327,7 @@ server <- function(input, output, session) {
                                    label = "Stock List (Pick One to Analyze)",
                                    choices = stock_list_tbl$label,
                                    multiple = FALSE,
-                                   selected = stock_list_tbl %>% filter(label %>% str_detect(
+                                   selected = stock_list_tbl %>% filter(label %>% grepl(
                                        pattern = str_c(reactive_values$last_symbol, ",")
                                    )) %>% pull(label),
                                    options = pickerOptions(
