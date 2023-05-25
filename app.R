@@ -146,7 +146,7 @@ ui <- navbarPage(
         p("The app allows users to analyze Brazilian real estate stocks and manage their stock portfolio. The app contains interactive plots and a table of the available stock data. Furthermore, the user can add stocks to a portfolio by specifying the stock code and quantity."),
         packages_bagde(c("tidyverse", "shiny", "yahoofinancer", "bs4Dash", "DT", "fontawesome")),
         img_with_link("real_estate_stocks_analyzer_app.png", "/marine_analyzer/", rpubs = FALSE),
-        app_link_buttons("marine_analyzer"),
+        app_link_buttons("real_estate_stocks_analyzer"),
 
         # Second App
         section_subtitle("Biodiversity Analyzer", small = "created in January 2023", id = "biodiversity_analyzer"),
