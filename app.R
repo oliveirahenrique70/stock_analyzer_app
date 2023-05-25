@@ -43,17 +43,17 @@ ui <- navbarPage(
       # First section - Data Potency
       section_title("Get the Full Potency of your Data"),
       p("Welcome to the", pink_words("HO"), "portfolio webpage 🧑‍💻, where you can unlock the full potential of your data. As a data scientist, my goal is to help you get the most out of your information. Here's how I can help:"),
-      p(bullet_point(), "Efficiently handle ", pink_words("large data sets"), ",", "create easy-to-interpret ", pink_words("data visualization"), ", and construct efficient", pink_words("machine learning models"), "."),
+      p(bullet_point(), "Efficiently handle ", pink_words("large data sets"), ",", "create easy-to-interpret ", pink_words("data visualization"), ", and build", pink_words("machine learning models"), "."),
       p(bullet_point(), "Develop intuitive and captivating ", pink_words("data science reports"),
         " that uncover important insights from your data."),
       p(bullet_point(), "Build ", pink_words("interactive apps"),
-        " that enable real-time exploration of your data, generating custom reports or visualizations, and performing unique analyses."),
+        " that enable real-time exploration of your data."),
       p("My goal is to create tools that facilitate data analysis for both experts and amateur users. Let's work together to get the full potential of your data."),
 
       div(align = "center",
           h2(tags$em("What porfolio are you interested in?")),
-          actionButton("link_to_ds_report", "Data Science Reports", style="background-color: purple; font-size: 24px;  padding: 20px 40px"),
-          actionButton("link_to_apps", "Interactive Apps", style="background-color: purple; font-size: 24px;  padding: 20px 40px;")
+          actionButton("link_to_ds_report", "Data Science Reports", style = "background-color: purple; font-size: 24px;  padding: 20px 40px"),
+          actionButton("link_to_apps", "Interactive Apps", style = "background-color: purple; font-size: 24px;  padding: 20px 40px;")
       ),
       br(),
 
