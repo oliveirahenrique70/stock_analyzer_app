@@ -195,7 +195,7 @@ ui <- navbarPage(
         section_subtitle("Solar Panels ROI Analysis", small = "created in October 2022", id = "solar_panels_roi_analysis"),
         p("The project objective is to analyzes Solar Panels Return on Investment (ROI) in U.S.A. states, which is calculated by considering the investment cost, the money saved on energy, the money made by selling extra energy, and the incentives of federal/state tax credits."),
         packages_bagde(c("tidyverse", "rmarkdown", "plotly", "DT", "htmltools")),
-        img_with_link("ds_solar_panel_analysis.png", "solar_panels_ROI_analysis", rpubs = TRUE),
+        img_with_link("ds_solar_panels_analysis_2.png", "solar_panels_ROI_analysis", rpubs = TRUE),
         ds_report_link("solar_panels_ROI_analysis"),
 
         # Third Report
