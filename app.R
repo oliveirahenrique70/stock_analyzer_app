@@ -188,8 +188,8 @@ ui <- navbarPage(
         section_subtitle("Pooling Data Analysis", small = "created in July 2020", id = "pooling_data_analysis"),
         p("This report analyzes a polling dataset that includes information on two election candidates, their images, ballot results and voters' demographics data."),
         packages_bagde(c("tidyverse", "rmarkdown", "plotly", "kableExtra")),
-        img_with_link("ds_polling_data_analysis_2.png", "PollingDataAnalisys", rpubs = TRUE),
-        ds_report_link("PollingDataAnalisys"),
+        img_with_link("ds_polling_data_analysis_2.png", "Polling_Data_Analisys", rpubs = TRUE),
+        ds_report_link("Polling_Data_Analisys"),
 
         # Second Report
         section_subtitle("Solar Panels ROI Analysis", small = "created in October 2022", id = "solar_panels_roi_analysis"),
