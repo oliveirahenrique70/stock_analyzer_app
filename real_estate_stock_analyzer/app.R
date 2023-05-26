@@ -23,7 +23,7 @@ portfolio_stocks <- data.frame(
   stringsAsFactors = FALSE
 )
 
-stocks_data <- read_csv("www/FI.csv")
+load("www/stocks_data.RData")
 
 # Join data
 portfolio_stocks <- portfolio_stocks %>%
@@ -85,9 +85,9 @@ body <- dashboardBody(tabItems(
   #### Intro Tab ####
   tabItem(tabName = "intro",
           fluidPage(
-            p(h4("Welcome to the", tags$strong("Real Estate Stocks Analyzer"), " app.")),
-            p(h4("This app allows users to analyze brazilian real estate stocks and manage their stocks portfolio. The app integrates various R packages such as ", tags$em("shiny"),", ", tags$em("bs4Dash"), ", ", tags$em("plotly"), ", ", tags$em("DT"), ", ", tags$em("yahoofinancer"), " and others.")),
-            p(h4("Interact with the app's sidebar tabs to define what you want to analyze. Also in the sidebar of the app, use the stock selectize filter to select the stock you want to analyze.")),
+            p(h4("Welcome to the", pink_words("Real Estate Stocks Analyzer"), " app.")),
+            p(h4("This app allows users to analyze brazilian real estate stocks and manage their stocks portfolio. The app integrates various R packages such as", tags$em("shiny"),", ", tags$em("bs4Dash"), ", ", tags$em("plotly"), ", ", tags$em("DT"), ", ", tags$em("yahoofinancer"), ".")),
+            p(h4("Interact with the app's sidebar to define what you want to analyze. Also in the sidebar of the app, select the stock you want to analyze.")),
             p(h4("Visit the website ", pink_words("apps.hodatascience.com.br", link = "https://apps.hodatascience.com.br/") , "for more apps like this, to know more about the app creator or to check out interesting data science reports projects")),
             br(),
             created_by_msg()
@@ -190,6 +190,12 @@ server <- function(input, output, session) {
     df
   })
 
+  # Get inital data when app start
+  observe({
+      stocks_df()
+      stocks_analysis_df()
+      print(stocks_analysis_df())
+  })
   # Stock data for table
   stocks_table_df <- reactive({
     df <- stocks_df() %>%
@@ -197,11 +203,6 @@ server <- function(input, output, session) {
       mutate(date = as.Date(date)) %>%
       mutate_if(is.numeric, ~ round(., 2))
     df <- cbind(code = input$stock_code, df)
-    df
-  })
-
-  portfolio_stats_df <- reactive({
-    df <- portfolio_df() %>% portfolio_stats()
     df
   })
 
@@ -239,8 +240,6 @@ server <- function(input, output, session) {
         portfolio_df(stocks_update)
       }
     }
-    
-    #print(modifiedData())
   })
 
   #### Render Table ####
@@ -253,14 +252,6 @@ server <- function(input, output, session) {
   table_server("stocks_table",
                stocks_table_df,
                reactivity = TRUE
-  )
-  table_server("portfolio_stats",
-               portfolio_stats_df,
-               ordering = FALSE,
-               row_names = TRUE,
-               reactivity = TRUE,
-               search = FALSE,
-               paging = FALSE
   )
 
   #### Render Plots ####

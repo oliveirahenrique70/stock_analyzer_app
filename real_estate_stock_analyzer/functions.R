@@ -205,24 +205,6 @@ join_portfolio_data <- function(df, stocks_data) {
     )
 }
 
-portfolio_stats <- function(df) {
-  output <- data.frame(
-    " " = c(nrow(df),
-            sum(df$quantity),
-            mean(df$`Variação Preço`),
-            paste(max(df$`Variação Preço`), "-", df$code[which.max(df$`Variação Preço`)]),
-            paste(min(df$`Variação Preço`), "-", df$code[which.min(df$`Variação Preço`)])
-            ),
-    check.names = FALSE
-  )
-  rownames(output) <- c("number of stocks",
-                        "total quantity",
-                        "price variation mean (60 days)",
-                        "max price variation (60 days)",
-                        "min price variation (60 days)")
-  return(output)
-}
-
 bar_plot <- function(df) {
   # Define the colors
   colors <- c(
