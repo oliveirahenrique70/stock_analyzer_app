@@ -153,10 +153,12 @@ body <- dashboardBody(tabItems(
             fluidRow(
             card_UI(plotlyOutput("portfolio_price"),
                     "Portfolio Stats",
-                    width = 6),
+                    width = 6,
+                    height = 600),
             card_UI(plotlyOutput("portfolio_quantity"),
                     "Portfolio Quantity",
-                    width = 6)
+                    width = 6,
+                    height = 600)
             )
           ))
 ))
@@ -194,8 +196,8 @@ server <- function(input, output, session) {
   observe({
       stocks_df()
       stocks_analysis_df()
-      print(stocks_analysis_df())
   })
+ 
   # Stock data for table
   stocks_table_df <- reactive({
     df <- stocks_df() %>%

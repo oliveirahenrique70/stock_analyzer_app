@@ -186,10 +186,8 @@ get_price_var <- function(df) {
 
   df <- cbind(df,
               `stock price` = unlist(lapply(stocks_data, function(x) round(tail(x[["close"]], 1), 2))),
-              `30 days variance` = unlist(lapply(stocks_data, function(x) round(var(x[["adj_close"]]), 2)))
-  )
-
-  df$`total value` <- df$quantity * df$`stock price`
+              `30 days variance` = unlist(lapply(stocks_data, function(x) round(var(x[["adj_close"]]), 2)))) %>%
+      mutate(`total value in R$` = quantity * `stock price`)
   return(df)
 }
 
@@ -219,9 +217,9 @@ bar_plot <- function(df) {
 
   # Create the plot
   plot <- ggplot(df, aes(code,
-                         `total value`,
+                         `total value in R$`,
                          fill = code,
-                         text = `total value`)) +
+                         text = `total value in R$`)) +
     geom_bar(stat = "identity") +
     scale_fill_manual(values = colors[1:length(unique(df$code))],
                       guide = guide_legend(title = "Legend")) +
@@ -229,7 +227,8 @@ bar_plot <- function(df) {
     theme(legend.position = "none") +
     labs(x = NULL)
   
-  ggplotly(plot, tooltip = "text")
+  ggplotly(plot, tooltip = "text") %>%
+      layout(height = 550)
 }
 
 pie_plot <- function(df) {
@@ -261,7 +260,8 @@ pie_plot <- function(df) {
   ) %>%
     layout(
       xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-      yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE)
+      yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+      height = 550
     )
 }
 
