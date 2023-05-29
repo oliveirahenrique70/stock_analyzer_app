@@ -77,7 +77,7 @@ sidebar <- dashboardSidebar(#expandOnHover = FALSE,
     h5(tags$strong("Select Stock:"), align = "center", style = "color: #FF50CA;"),
     select_stock("stock_code", stocks_data),
     
-    tags$div(style = "height: 100px;"),
+    tags$div(style = "height: 50px;"),
     
     created_by_msg(sidebar = TRUE)
   ))
@@ -165,17 +165,24 @@ body <- dashboardBody(tabItems(
             )
           )),
  
-  #### Share Feedback Plot Tab ####
+  #### Share Feedback Tab ####
   tabItem(tabName = "share_feedback",
           fluidPage(
               p(h4("We value your ", pink_words("feedback"), "!")),
-              p(h4("Thank you for using our the ", pink_words("Real Estate Stock Analyzer"), "app. We would greatly appreciate it if you could take a moment to provide us with your opinion on the apps performance, bugs, and suggestions for improvements.")),
+              p(h4("Thank you for using the ", pink_words("Real Estate Stock Analyzer"), "app. We would greatly appreciate it if you could take a moment to provide your opinion on the apps performance, bugs, or suggestions for improvements.")),
               br(),
-              ranking_buttons("raking"),
-              textAreaInput(inputId = "message",
-                            label = "Enter message:",
+              div(align = "center",
+              ranking_buttons("feedback_raking"),
+              br(),
+              textAreaInput(inputId = "feedback_message",
+                            label = "Enter Message:",
                             height = "200px",
-                            width = "300px")
+                            width = "500px"),
+              br(),
+              actionButton("submit_feedback",
+                           label = "Submit",
+                           style = "color: white; background-color: #5E81AC; border-color: #5E81AC;")
+              )
           )
   )
  
@@ -227,6 +234,33 @@ server <- function(input, output, session) {
     df
   })
 
+  #### Send Feedback ####
+  observeEvent(input$submit_feedback, {
+      ranking <- isolate(input$feedback_raking)
+      msg <- isolate(input$feedback_message)
+      
+      # Create email body
+      email <- envelope(
+          to = "oliveirahenrique70@gmail.com",
+          from = "oliveirahenrique70@gmail.com",
+          subject = paste0("Real Estate Apps Feeback - Raking = ", ranking),
+          text = msg
+      )
+      
+      # Create smtp server port
+      smtp <- emayili::server(
+          host = "smtp.gmail.com",
+          port = 465,
+          username = "oliveirahenrique70@gmail.com",
+          password = "mkjppkgwvnfqrzfh"
+      )
+      
+      # Send email
+      smtp(email)
+      
+      shinyalert(title = "Message sent!", type = "success")
+  })
+ 
   #### Add Stock ####
   observeEvent(input$add_stock, {
     if (input$stock_code != "" && input$new_quantity > 0 && input$stock_code %in% portfolio_df()$code == FALSE) {

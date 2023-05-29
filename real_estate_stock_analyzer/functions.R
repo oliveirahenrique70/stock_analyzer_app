@@ -106,9 +106,9 @@ created_by_msg <- function(sidebar = FALSE) {
 
 porfolio_buttons <- function() {
   div(
-    actionButton("add_stock", "Add", style = "color: white; background-color: #5E81AC"),
-    actionButton("remove_stock", "Remove", style = "color: white; background-color: #5E81AC"),
-    actionButton("update_stock", "Update", style = "color: white; background-color: #5E81AC"),
+    actionButton("add_stock", "Add", style = "color: white; background-color: #5E81AC; border-color: #5E81AC;"),
+    actionButton("remove_stock", "Remove", style = "color: white; background-color: #5E81AC; border-color: #5E81AC;"),
+    actionButton("update_stock", "Update", style = "color: white; background-color: #5E81AC; border-color: #5E81AC;"),
     align = "center"
   )
 }
@@ -176,7 +176,7 @@ pink_words <- function(words, link = NA){
 ranking_buttons <- function(id) {
     radioGroupButtons(
     inputId = id,
-    label = "Rank the app:",
+    label = "Rank App:",
     choices = list("★" = 1, "★★" = 2, "★★★" = 3, "★★★★" = 4, "★★★★★" = 5),
     status = "primary")
 }
