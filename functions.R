@@ -132,14 +132,22 @@ pink_words <- function(words){
   tags$span(tags$b(words), style = "color: #FF50CA;")
 }
 
-section_title <- function(title) {
-  tagList(
-    h2(tags$i(title)),
-    hr(style = "border-top: 2px solid #FF50CA;")
-  )
+section_title <- function(title, line_position = "down") {
+    if (line_position == "down") {
+        tagList(
+            h2(tags$i(title)),
+            hr(style = "border-top: 2px solid #FF50CA;")
+        )
+    } else if (line_position == "up") {
+        tagList(
+            hr(style = "border-top: 2px solid #FF50CA;"),
+            h2(tags$i(title))
+        )
+    }
+
 }
 
-section_subtitle<- function(title, small = NULL, id = NULL, hr = TRUE) {
+section_subtitle <- function(title, small = NULL, id = NULL, hr = TRUE) {
   if (hr) {
     tagList(
       hr(style = "border-top: 2px solid #FF50CA;"),
