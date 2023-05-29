@@ -46,7 +46,7 @@ ui <- navbarPage(
       p("Welcome to the", pink_words("HO"), "portfolio webpage! 🧑‍💻 As a data scientist, my goal is to help you get the most out of your information. Here's how I can help:"),
       fluidRow(
           column(width = 7,
-                 p(bullet_point(), "Efficiently handle ", pink_words("large data sets"), ",", "create easy-to-interpret ", pink_words("data visualization"), ", and build", pink_words("machine learning models"), "."),
+                 p(bullet_point(), "Manipulate large", pink_words("data"), ", create ", pink_words("data visualization"), " and ", pink_words("machine learning models"), "."),
                  p(bullet_point(), "Develop intuitive and captivating ", pink_words("data science reports"), "."),
                  p(bullet_point(), "Build ", pink_words("interactive apps"), " that enable real-time exploration of your data.")
                  ),
