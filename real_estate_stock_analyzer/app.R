@@ -13,6 +13,8 @@ library(plotly)
 library(fontawesome)
 library(yahoofinancer)
 library(tidyquant)
+library(emayili)
+library(shinyalert)
 
 source("functions.R")
 
