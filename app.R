@@ -44,6 +44,7 @@ ui <- navbarPage(
       section_title("Get the Full Potency of your Data", line_position = "up"),
       br(),
       p("Welcome to the", pink_words("HO"), "portfolio webpage! 🧑‍💻 As a data scientist, my goal is to help you get the most out of your information. Here's how I can help:"),
+      br(),
       fluidRow(
           column(width = 7,
                  p(bullet_point(), "Manipulate large", pink_words("data"), ", create ", pink_words("data visualization"), " and ", pink_words("machine learning models"), "."),
@@ -58,6 +59,7 @@ ui <- navbarPage(
                     
                  )
       ),
+      br(),
       p("My goal is to create tools that facilitate data analysis for both experts and amateur users. Let's work together to get the full potential of your data."),
       #br(),
 

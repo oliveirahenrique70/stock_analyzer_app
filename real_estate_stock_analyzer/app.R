@@ -68,6 +68,9 @@ sidebar <- dashboardSidebar(#expandOnHover = FALSE,
     menuItem("Portfolio Analysis",
              tabName = "portfolio_analysis",
              icon = icon("chart-pie")),
+    menuItem("Share Feedback",
+             tabName = "share_feedback",
+             icon = icon("bullhorn")),
     
     tags$div(style = "height: 50px;"),
     
@@ -86,11 +89,11 @@ body <- dashboardBody(tabItems(
   tabItem(tabName = "intro",
           fluidPage(
             p(h4("Welcome to the", pink_words("Real Estate Stocks Analyzer"), " app.")),
-            p(h4("This app allows users to analyze brazilian real estate stocks and manage their stocks portfolio. The app integrates various R packages such as", tags$em("shiny"),", ", tags$em("bs4Dash"), ", ", tags$em("plotly"), ", ", tags$em("DT"), ", ", tags$em("yahoofinancer"), ".")),
-            p(h4("Interact with the app's sidebar to define what you want to analyze. Also in the sidebar of the app, select the stock you want to analyze.")),
-            p(h4("Visit the website ", pink_words("apps.hodatascience.com.br", link = "https://apps.hodatascience.com.br/") , "for more apps like this, to know more about the app creator or to check out interesting data science reports projects")),
+            p(h4("This app enables users to analyze Brazilian real estate stocks and manage their stock portfolio. Use the sidebar to interact with the app, define your analysis preferences, and select the stock you want to analyze.")),
+            p(h4("The app utilizes popular R packages like", pink_words("shiny"),", ", pink_words("bs4Dash"), ", ", pink_words("plotly"), ",", pink_words("yahoofinancer"), ".")),
+            created_by_msg(),
+            p(h4("Visit the website ", pink_words("apps.hodatascience.com.br", link = "https://apps.hodatascience.com.br/") , "for more similar apps and to learn more about the app creator.")),
             br(),
-            created_by_msg()
           )),
 
   #### Stocks Analysis Tab####
@@ -132,7 +135,7 @@ body <- dashboardBody(tabItems(
             sidebarPanel(
               width = 4,
               style = "margin-right: 100px;",
-              numericInput("new_quantity", "Quantity", value = 0),
+              numericInput("new_quantity", "Define Quantity:", value = 0),
               porfolio_buttons(),
             ),
             # Stocks output
@@ -160,8 +163,24 @@ body <- dashboardBody(tabItems(
                     width = 6,
                     height = 600)
             )
-          ))
+          )),
+ 
+  #### Share Feedback Plot Tab ####
+  tabItem(tabName = "share_feedback",
+          fluidPage(
+              p(h4("We value your ", pink_words("feedback"), "!")),
+              p(h4("Thank you for using our the ", pink_words("Real Estate Stock Analyzer"), "app. We would greatly appreciate it if you could take a moment to provide us with your opinion on the apps performance, bugs, and suggestions for improvements.")),
+              br(),
+              ranking_buttons("raking"),
+              textAreaInput(inputId = "message",
+                            label = "Enter message:",
+                            height = "200px",
+                            width = "300px")
+          )
+  )
+ 
 ))
+
 
 # Create ui dashboardPage (front-end)
 ui <- dashboardPage(freshTheme = bs4_theme() ,

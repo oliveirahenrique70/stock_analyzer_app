@@ -84,7 +84,7 @@ created_by_msg <- function(sidebar = FALSE) {
     )
   } else {
     tagList(
-      hr(style = "border-top: 2px solid #FF50CA;"),
+      #hr(style = "border-top: 2px solid #FF50CA;"),
       fluidRow(
         style = "text-align:center; background-color:#353C42",
         class = "jumbotron",
@@ -106,9 +106,9 @@ created_by_msg <- function(sidebar = FALSE) {
 
 porfolio_buttons <- function() {
   div(
-    actionButton("add_stock", "Add"),
-    actionButton("remove_stock", "Remove"),
-    actionButton("update_stock", "Update"),
+    actionButton("add_stock", "Add", style = "color: white; background-color: #5E81AC"),
+    actionButton("remove_stock", "Remove", style = "color: white; background-color: #5E81AC"),
+    actionButton("update_stock", "Update", style = "color: white; background-color: #5E81AC"),
     align = "center"
   )
 }
@@ -160,6 +160,7 @@ media_icon <- function(href, icon) {
     target = "_blank"
   )
 }
+
 pink_words <- function(words, link = NA){
   if (is.na(link)) {
     tags$span(tags$b(words), style = "color: #FF50CA;")
@@ -170,6 +171,14 @@ pink_words <- function(words, link = NA){
       target = "_blank"
     )
   }
+}
+
+ranking_buttons <- function(id) {
+    radioGroupButtons(
+    inputId = id,
+    label = "Rank the app:",
+    choices = list("★" = 1, "★★" = 2, "★★★" = 3, "★★★★" = 4, "★★★★★" = 5),
+    status = "primary")
 }
 
 #### Server Functions ####
