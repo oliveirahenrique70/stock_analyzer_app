@@ -207,6 +207,7 @@ server <- function(input, output, session) {
     get_price_var(portfolio_stocks))
 
   stocks_df <- reactive({
+    req(input$stock_code)
     df <- get_stock_data(input$stock_code, "2y")
     df
   })
@@ -221,10 +222,10 @@ server <- function(input, output, session) {
   })
 
   # Get inital data when app start
-  observe({
-      stocks_df()
-      stocks_analysis_df()
-  })
+  # observe({
+  #     stocks_df()
+  #     stocks_analysis_df()
+  # })
  
   # Stock data for table
   stocks_table_df <- reactive({
