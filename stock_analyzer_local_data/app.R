@@ -1,432 +1,355 @@
-# PACKAGES ----
+#### INTRO ####
 
-library(tidyverse)
-library(mongolite)
-library(jsonlite)
-library(config)
+# Load packages
+library(bs4Dash)
+library(htmltools)
+library(leaflet)
+library(fresh)
 library(shiny)
-library(plotly)
-library(shinythemes)
-library(shinyjs)
 library(shinyWidgets)
-library(tidyquant)
+library(tidyverse)
+library(shinycssloaders)
+library(sf)
+library(fontawesome)
+library(bslib)
+library(shinycssloaders)
+library(gt)
 
-# FUNCTIONS AND DATA ----
+# Load app functions and vectors
+source("app_functions_and_vectors.R")
 
-source(file = "stock_analysis_functions.R")
+# Read data
+load("www/br_states.RData")
+load("www/br_cities.RData")
 
-stock_list_tbl <- get_stock_list("SP500")
+df <- read_csv("www/data_2022.csv")
+# df_filtered <- df %>%
+#   filter(DthAtualizaCadastralEmpreend > "2022-01-01") %>%
+#   filter(DthAtualizaCadastralEmpreend < "2023-01-01")
+# 
+# write.csv(df_filtered, "data_2022.csv", row.names = FALSE)
 
-user_base_tbl <- tibble(
-    user = c("user1", "user2"),
-    password = c("pass1", "pass2"),
-    permissions = c("admin", "standard"),
-    name = c("User One", "User Two"),
-    favorites = list(c("AAPL", "GOOG", "NFLX"), c("TWTR")),
-    last_symbol = c("NFLX", "TWTR"),
-    user_settings = list(tibble(mavg_short = 20, mavg_long = 50, time_window = 180),
-                         tibble(mavg_short = 30, mavg_long = 70, time_window = 365))
+# # create the theme with a cyberpunk color palette
+theme <- bs4_theme()
+
+#### HEADER ####
+
+header <- dashboardHeader(
+  status = "secondary",
+  tags$li(
+    a(
+      href = 'https://apps.hodatascience.com.br/',
+      img(
+        src = 'HO.gif',
+        title = "Company Home",
+        height = "70px"
+      ),
+      style = "padding-top:10px; padding-bottom:10px"
+    ),
+    class = "dropdown"
+  ),
+  h2("Brazilian Renewable Energy",
+     style = "padding-left: 300px;font: Geolica;; color: white")
+)
+  #title = "Renewable Energy App")
+
+#### SIDEBAR ####
+
+sidebar <- dashboardSidebar(
+  
+  includeCSS("www/sidebar_css.txt"),
+  
+  #expandOnHover = FALSE,
+  minified = FALSE,
+
+  sidebarMenu(
+    menuItem("Intro",
+             tabName = "intro",
+             icon = icon("cog")
+    ),
+    menuItem("Data Visualization",
+             tabName = "data_viz",
+             icon = icon("globe")
+    ),
+    menuItem("Data Table",
+             tabName = "data_table",
+             icon = icon("th")
+    )
+  ),
+    
+  hr(),
+
+  sibebar_section("Select State"),
+  selectInputUI("state_name",
+                c("All", sort(unique(br_states$name)))),
+  br(),
+
+  sibebar_section("Set Analysis Period"),
+  analysisPeriodUI("analysis_period"),
+  br(),
+
+  sibebar_section("Energy Source"),
+  checkboxUI("energy_source_checkbox"),
+  hr(),
+
+  # sibebar_section("Select Potency"),
+  # buttonsUI(),
+  # br(),
+
+
+  submitUI()
 )
 
-# UI ----
+#### BODY ####
 
-ui <- tagList(
-    # CSS
-    tags$head(
-        tags$link(
-            rel = "stylesheet",
-            type = "text/css",
-            href = shinytheme("paper")
-        )
+body <- dashboardBody(
+  
+  #### INTRO TAB ####
+  tabItems(
+    tabItem(tabName = "intro",
+            fluidPage(
+              h4("The app is a data visualization tool that provides information on renewable energy sources in Brazil during the year of 2022. It allows users to explore and analyze data related to renewable energy generation across different states and cities in Brazil.",
+                 style = "text-align: justify; margin-right: 100px; margin-left: 100px"),
+              br(),
+              h4("The data source is the official Brazilian government website ", a("gov.br", href="https://dados.gov.br/dados/conjuntos-dados/relacao-de-empreendimentos-de-geracao-distribuida", target = "blanck"), " which contais a description list of renewable generation projects",
+                 style = "text-align: justify; margin-right: 100px; margin-left: 100px"),
+              br(),
+              h4("Enjoy exploring this interesting app and gaining insights into renewable energy generation in Brazil!",
+                 style = "text-align: justify; margin-right: 100px; margin-left: 100px"),
+              created_by_msg(),
+              style = "height:750px"
+            )
     ),
     
-    # JS
-    useShinyjs(),
+    #### VISUALIZATION TAB ####
+    tabItem(tabName = "data_viz",
+            fluidPage(
+              bs4Card(
+                id = "card_states",
+                width = 12,
+                #height = "650",
+                title = strong("Total Values Box"),
+                fluidRow(
+                  valueBoxUI("count"),
+                  valueBoxUI("potency"),
+                  valueBoxUI("micro"),
+                  valueBoxUI("mini")
+                )
+              ),
+              
+              
+              bs4Card(
+                id = "card_states",
+                width = 12,
+                height = "600",
+                div(align = "center",
+                    h4(strong("Geolocation Graph")),
+                    uiOutput("graph_heading"),
+                    br()),
+                title = NULL,
+                leafletPlot("plot"),
+                #maximizable = TRUE,
+                collapsible = FALSE
+              )
+            )),
     
-    # Website ----
-    uiOutput(outputId = "website")
+    #### TABLE TAB ####
+    tabItem(tabName = "data_table",
+            fluidPage(
+              bs4Card(
+                id = "card_states",
+                width = 12,
+                #height = "650",
+                title = strong("Energy Source Values Box"),
+                fluidRow(
+                  valueBoxUI("water"),
+                  valueBoxUI("bio"),
+                  valueBoxUI("wind"),
+                  valueBoxUI("solar")
+                )
+              ),
+              
+              bs4Card(
+                id = "card_states",
+                width = 12,
+                headerBorder = FALSE,
+              height = "650",
+              title = NULL,
+              div(align = "center",
+                  h4(strong("Data Table")),
+                  uiOutput("table_heading")),
+              gtTable("table"),
+                maximizable = FALSE,
+                collapsible = FALSE
+              )
+            )
+    )
+  )
 )
 
-server <- function(input, output, session) {
-    # USER LOGIN ----
+#### DASHBOARD UI ####
+ui <- dashboardPage(dark = NULL,
+                    freshTheme = theme,
+                    header,
+                    sidebar,
+                    body)
 
-    # User information ----
-    reactive_values <- reactiveValues()
-    
-    observe({
-        #if (credentials()$user_auth) {
-        user_data_tbl <- user_base_tbl
-        
-        reactive_values$user_name <- user_data_tbl$name
-        reactive_values$permissions <- user_data_tbl$permissions
-        reactive_values$favorites_list <-
-            user_data_tbl %>% pull(favorites) %>% pluck(1)
-        reactive_values$last_symbol <- user_data_tbl$last_symbol
-        reactive_values$user_settings <-
-            user_data_tbl %>% pull(user_settings) %>% pluck(1)
-        
-        #}
-    })
-    
-    # Moving averages and time window
-    observeEvent(input$apply_and_save, {
-        user_settings_tbl <- tibble(
-            mavg_short = input$mavg_short,
-            mavg_long = input$mavg_long,
-            time_window = input$time_window
-        )
-    })
-    
-    # Toggle Input Settings ----
-    observeEvent(input$settings_toggle, {
-        toggle(id = "input_settings", anim = TRUE)
-    })
-    
-    # Stock Symbol ----
-    stock_symbol <- eventReactive(input$analyze, {
-        get_symbol_from_user_input(input$stock_selection)
+# Define server logic (back-end)
+server <- function(input, output, session) {
+  
+  #### Loading Box ####
+  observeEvent(input$submit, {
+    showModal(modalDialog(
+      title = "Loading",
+      div(align = "center",
+          img(src = 'loading.gif', height = "70px")),
+      br(),
+      div("Please wait while the app is loading..."),
+      footer = NULL#,
+      #size = "small"
+    ))
+  }, ignoreNULL = FALSE)
+  
+  #### REACTIVE DATA ####
+
+  #### Filtered Data ####
+  df_filtered <- eventReactive(input$submit, {
+    if (input$state_name == "All") {
+      df %>%
+        apply_filters(input)
+    } else {
+      UF_code <- br_states %>%
+        filter(name == input$state_name) %>%
+        pull(SigUF)
+
+      df %>%
+        apply_filters(input) %>%
+        filter(SigUF == UF_code)
+    }
+  }, ignoreNULL = FALSE)
+
+  #### Mini/Micro Data ####
+  df_mini_micro <- eventReactive(input$submit, {
+    df_filtered() %>%
+      group_by(DscPorte) %>%
+      summarise(micro_mini_count = n()) %>%
+      ungroup()
+  }, ignoreNULL = FALSE)
+  
+  df_mini_micro_table <- eventReactive(input$submit, {
+    if (input$state_name == "All") {
+      df_filtered() %>%
+      group_by(SigUF, DscPorte) %>%
+        summarise(n = n(),
+                  potency = sum(MdaPotenciaInstaladaKW)) %>%
+        ungroup()
+    } else {
+      df_filtered() %>%
+        group_by(NomMunicipio, DscPorte) %>%
+        summarise(n = n(),
+                  potency = sum(MdaPotenciaInstaladaKW)) %>%
+        mutate(nome = toupper(NomMunicipio)) %>%
+        rename(name = NomMunicipio) %>%
+        ungroup()
+    }
+  }, ignoreNULL = FALSE)
+
+  observe({print(df_mini_micro_table())})
+  #### Energy Source Data ####
+  df_energy_sorce <- eventReactive(input$submit, {
+      df_filtered() %>%
+        group_by(DscFonteGeracao) %>%
+        summarise(total_potency = sum(MdaPotenciaInstaladaKW),
+                  n = n()) %>%
+        ungroup()
+  }, ignoreNULL = FALSE)
+  
+  #### DF React ####
+  df_react <- eventReactive(input$submit, {
+    if (input$state_name == "All") {
+      df_states_count <- df_filtered() %>%
+        group_by(SigUF) %>%
+        summarise(n = n(),
+                  potency = sum(MdaPotenciaInstaladaKW)) %>%
+        filter(SigUF != "")
+      
+      df_react <- br_states %>%
+        left_join(df_states_count, by = "SigUF") %>%
+        drop_na() %>%
+        add_label()
+      
+    } else {
+      State_code <- br_states %>%
+        filter(name == input$state_name) %>%
+        pull(State)
+      
+      df_cities_count <- df_filtered() %>%
+        group_by(NomMunicipio) %>%
+        summarise(n = n(),
+                  potency = sum(MdaPotenciaInstaladaKW)) %>%
+        mutate(nome = toupper(NomMunicipio)) %>%
+        rename(name = NomMunicipio) %>%
+        ungroup()
+      
+      df_react <- br_cities %>%
+        filter(State == State_code) %>%
+        left_join(df_cities_count, by = "nome") %>%
+        drop_na() %>%
+        add_label()
+    }
+  }, ignoreNULL = FALSE)
+  
+  #### VALUE BOXES ####
+
+  #### Total Values ####
+  valueBoxServer_Total("count", reactive(df_react()), "n", "primary", "lightbulb", "Count")
+  valueBoxServer_Total("potency", reactive(df_react()), "potency", "primary", "bolt", "Potency in KW")
+  valueBoxServer_MicroMini("micro",reactive(df_mini_micro()), "Microgeracao", "info", "house", "Count Micro", footer_text = "< 75 KW")
+  valueBoxServer_MicroMini("mini", reactive(df_mini_micro()), "Minigeracao", "info", "industry", "Count Mini", footer_text = "> 75 KW")
+
+  # #### Energy Source ####
+  valueBoxServer_energySource("water", reactive(df_energy_sorce()), "Hydraulic", "sub_test", "primary", "water", "Hydro")
+  valueBoxServer_energySource("bio", reactive(df_energy_sorce()), "Biogas", "sub_test", "danger", "fire", "Biogas")
+  valueBoxServer_energySource("wind", reactive(df_energy_sorce()),"Wind", "sub_test", "success", "wind", "Eolic")
+  valueBoxServer_energySource("solar", reactive(df_energy_sorce()), "Solar", "sub_test", "warning", "sun", "Solar")
+
+  #### UPDATE FILTERS ####
+  observeEvent(df_react(), {
+    states_choices <- df %>%
+      apply_filters(input) %>%
+      left_join(br_states %>% select(SigUF, name), by = "SigUF")
+
+    updateSelectizeInput(session,
+                         "state_name",
+                         choices = c("All", sort(unique(states_choices$name)[!is.na(unique(states_choices$name))])),
+                         selected = input$state_name)
+  })
+
+  
+  #### RENDER ####
+  observeEvent(input$submit, {
+    stateName <- eventReactive(input$submit, {
+      input$state_name
     }, ignoreNULL = FALSE)
     
-    # User Input ----
-    stock_selection_triggered <- eventReactive(input$analyze, {
-        input$stock_selection
-    }, ignoreNULL = FALSE)
-    
-    # Apply Moving Averages ----
-    mavg_short <- eventReactive(input$apply_and_save, {
-        input$mavg_short
-    },
-    ignoreNULL = FALSE)
-    
-    mavg_long <- eventReactive(input$apply_and_save, {
-        input$mavg_long
-    },
-    ignoreNULL = FALSE)
-    
-    # Apply Time Window ----
-    time_window <- eventReactive(input$apply_and_save, {
-        input$time_window
-    },
-    ignoreNULL = FALSE)
-    
-    selected_tab <- eventReactive(input$apply_and_save, {
-        # Set Selected Tab
-        if (is.character(input$stock_plot_tabset_panel)) {
-            selected_tab <- input$stock_plot_tabset_panel
-        } else {
-            selected_tab <- "Last Analysis"
-        }
-    },
-    ignoreNULL = FALSE)
-    
-    # Get Stock Data ----
-    stock_data_tbl <- reactive({
-        stock_symbol() %>%
-            get_stock_data(
-                from = today() - time_window(),
-                to   = today(),
-                mavg_short = mavg_short(),
-                mavg_long  = mavg_long()
-            )
+    output$graph_heading <- renderUI({
+      req(stateName())
+      h6(em(str_c(stateName(), " State Data")), style = "color: gray;")
+    })
+    output$table_heading <- renderUI({
+      req(stateName())
+      h6(em(str_c(stateName(), " State Data")), style = "color: gray;")
     })
     
-    # PLOT OUTPUT ----
-    
-    # Plot Header ----
-    output$plot_header <- renderText({
-        stock_selection_triggered()
-    })
-    
-    # Plotly Plot ----
-    output$plotly_plot <- renderPlotly({
-        stock_data_tbl() %>% plot_stock_data()
-    })
-    
-    # FAVORITES CARDS ----
-    
-    # Add Favorites Cards ----
-    observeEvent(input$favorites_add, {
-        new_stock_symbol <-
-            get_symbol_from_user_input(input$stock_selection)
-        
-        new_stock_symbol_in_favorites <-
-            new_stock_symbol %in% reactive_values$favorites_list
-        
-        if (!new_stock_symbol_in_favorites) {
-            reactive_values$favorites_list <-
-                c(reactive_values$favorites_list, new_stock_symbol) %>% unique()
-            
-            updateTabsetPanel(session = session,
-                              inputId = "stock_plot_tabset_panel",
-                              selected = new_stock_symbol)
-        }
-    })
-    
-    # Render Favorites Cards ----
-    output$favorite_cards <- renderUI({
-        if (length(reactive_values$favorites_list) > 0) {
-            generate_favorite_cards(
-                favorites = reactive_values$favorites_list,
-                from = today() - time_window(),
-                to   = today(),
-                mavg_short = mavg_short(),
-                mavg_long  = mavg_long()
-            )
-        }
-    })
-    
-    # Delete Favorites Cards ----
-    observeEvent(input$favorites_clear, {
-        modalDialog(
-            title = "Clear Favorites",
-            size = "m",
-            easyClose = TRUE,
-            footer = modalButton("Exit"),
-            p(h6(
-                "Are you sure you want to delete favorites cards?"
-            )),
-            br(),
-            div(
-                selectInput(
-                    inputId = "drop_list",
-                    label = "Remove Single Favorite",
-                    choices = reactive_values$favorites_list %>% sort()
-                ),
-                actionButton(
-                    inputId = "remove_single_favorite",
-                    label = "Clear Single",
-                    class = "btn-warning"
-                ),
-                actionButton(
-                    inputId = "remove_all_favorite",
-                    label = "Clear All Favorites",
-                    class = "btn-danger"
-                )
-            )
-        ) %>%
-            showModal()
-    })
-    
-    # Clear Single Favorites Cards ----
-    observeEvent(input$remove_single_favorite, {
-        reactive_values$favorites_list <- reactive_values$favorites_list %>%
-            .[reactive_values$favorites_list != input$drop_list]
-        
-        updateSelectInput(
-            session = session,
-            inputId = "drop_list",
-            choices = reactive_values$favorites_list %>% sort()
-        )
-    })
-    
-    # Clear All Favorites Cards ----
-    observeEvent(input$remove_all_favorite, {
-        reactive_values$favorites_list <- vector()
-        
-        updateSelectInput(
-            session = session,
-            inputId = "drop_list",
-            choices = reactive_values$favorites_list
-        )
-    })
-    
-    # Show/Hide Favorites Cards ----
-    observeEvent(input$favorites_toggle, {
-        toggle(id = "cards",
-               anim = TRUE)
-        toggle(id = "commentary_text",
-               anim = TRUE)
-    })
-    
-    
-    # TABS PANEL ----
-    
-    output$stock_plot <- renderUI({
-        #  Last Analysis Tab ----
-        tab_last_analysis <- tabPanel(title = "Last Analysis",
-                                      tab_panel(
-                                          title = stock_symbol(),
-                                          panel_body = plotlyOutput(outputId = "plotly_plot")
-                                      ),
-        )
-        
-        # Favorites Cards Tab ----
-        tab_favorites_cards <- NULL
-        
-        if (length(reactive_values$favorites_list) > 0) {
-            tab_favorites_cards <- reactive_values$favorites_list %>%
-                map(
-                    .f = function(x) {
-                        tabPanel(
-                            title = x,
-                            tab_panel(
-                                title = x,
-                                panel_body =  x %>%
-                                    get_stock_data(
-                                        from = today() - time_window(),
-                                        to   = today(),
-                                        mavg_short = mavg_short(),
-                                        mavg_long  = mavg_long()
-                                    ) %>%
-                                    plot_stock_data()
-                            )
-                        )
-                    }
-                )
-        }
-        
-        # Create Tabs Set Panel ----
-        do.call(
-            tabsetPanel,
-            list(tab_last_analysis) %>%
-                append(tab_favorites_cards) %>%
-                append(
-                    list(
-                        id = "stock_plot_tabset_panel",
-                        type = "tabs",
-                        selected = selected_tab()
-                    )
-                )
-        )
-    })
-    
-    # COMMENTARY SERVER ----
-    
-    output$analyst_commentary <- renderText({
-        generate_commentary(data = stock_data_tbl(), user_input = stock_selection_triggered())
-    })
-    
-    # RENDER WEBSITE ----
-    
-    output$website <- renderUI({
-        #req(credentials()$user_auth, reactive_values$last_symbol)
-        
-        navbarPage(
-            collapsible = TRUE,
-            title = p("Stock Analyzer App"),
-            theme = shinytheme("cyborg"),
-            
-            
-            # APPLICATION UI -----
-            fluidRow(
-                column(
-                    width = 12,
-                    h2(class = "pull-left", "App UI")
-                )
-            ),
-            
-            fluidRow(
-                
-                # Plot Input ----
-                column(width = 4,
-                       wellPanel(
-                           div(
-                               id = "input-main",
-                               pickerInput(
-                                   inputId = "stock_selection",
-                                   label = "Stock List (Pick One to Analyze)",
-                                   choices = stock_list_tbl$label,
-                                   multiple = FALSE,
-                                   selected = stock_list_tbl %>% filter(label %>% grepl(
-                                       pattern = str_c(reactive_values$last_symbol, ",")
-                                   )) %>% pull(label),
-                                   options = pickerOptions(
-                                       actionsBox = FALSE,
-                                       liveSearch = TRUE,
-                                       size = 10
-                                   )
-                               )
-                           ),
-                           div(
-                               id = "input_buttons",
-                               actionButton(
-                                   inputId = "analyze",
-                                   label = "Analyze",
-                                   icon = icon("download")
-                               ),
-                               div(
-                                   class = "pull-right",
-                                   actionButton(
-                                       inputId = "favorites_add",
-                                       label = NULL,
-                                       icon = icon("heart")
-                                   ),
-                                   actionButton(
-                                       inputId = "settings_toggle",
-                                       label = NULL,
-                                       icon = icon("cog")
-                                   )
-                               )
-                           ),
-                           div(
-                               id = "input_settings",
-                               hr(),
-                               sliderInput(
-                                   inputId = "mavg_short",
-                                   label = "Short Moving Average (Days)",
-                                   value = reactive_values$user_settings %>% pull(mavg_short),
-                                   min = 5,
-                                   max = 40
-                               ),
-                               sliderInput(
-                                   inputId = "mavg_long",
-                                   label = "Long Moving Average (Days)",
-                                   value = reactive_values$user_settings %>% pull(mavg_long),
-                                   min = 50,
-                                   max = 120
-                               ),
-                               sliderInput(
-                                   inputId = "time_window",
-                                   label = "Time Window (Days)",
-                                   value = reactive_values$user_settings %>% pull(time_window),
-                                   min = 180,
-                                   max = 730
-                               ),
-                               actionButton(
-                                   inputId = "apply_and_save",
-                                   label = "Apply and Save",
-                                   icon = icon("save")
-                               )
-                           ) %>% hidden()
-                       )),
-                
-                # Plot Output ----
-                column(width = 8,
-                       uiOutput(outputId = "stock_plot"))
-            ),
-            
-            # FAVORITES CARD -----
-            horizontal_line(),
-            
-            fluidRow(
-                
-                column(
-                    width = 12,
-                    h2(class = "pull-left",
-                       "Favorites Cards & Comment"),
-                    actionButton(class = "pull-right",
-                                 inputId = "favorites_clear",
-                                 "Clear Favorites")
-                )
-            ),
-            
-            br(),
-            
-            fluidRow(
-                column(
-                    width = 8,
-                    #verbatimTex,Output(outputId = "favorite_print"),
-                    uiOutput(outputId = "favorite_cards")
-                ),
-                column(width = 3,
-                       class = "panel",
-                       textOutput(outputId = "analyst_commentary")
-                )
-            ),
-            br()
-        )
-    })
+    leafletPlotServer("plot", df_react())
+    gtTableServer("table", df_react(), df_mini_micro_table(), stateName())
+  }, ignoreNULL = FALSE)
+
+  #### Remove Loading Box ####
+  observeEvent(df_react(), {
+  removeModal()
+  })
 }
 
-# RUN APP ----
+# Run app
 shinyApp(ui = ui, server = server)

@@ -1,0 +1,12 @@
+.shiny-options-group {
+ margin-left: 20px;
+}
+label[for=energ_source_checkboxHydraulic]{
+padding-right: 20px;
+}
+label[for=energ_source_checkboxBiogas]{
+padding-right: 100px;
+}
+label[for=energ_source_checkboxWind]{
+padding-right: 5px;
+}
