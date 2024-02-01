@@ -175,9 +175,6 @@ ui <- navbarPage(
       fluidPage(
         class = "container",
         section_title("Data Science Reports"),
-        p("A data science report is a document that provides a detailed analysis of a dataset using visualizations, tables, statistical analysis and machine learning techniques."),
-        p("The report typically includes a variety of visualizations, tables, and text that help to convey insights and conclusions drawn from the data. These reports can be used for a variety of purposes, such as identifying trends, predicting future outcomes, or making data-driven decisions."),
-        br(),
         p(tags$em(tags$strong("Table of Contents:"))),
 
         # Table of Content
