@@ -137,9 +137,6 @@ ui <- navbarPage(
       fluidPage(
         class = "container",
         section_title("Interactive Apps"),
-        p("An interactive app is a type of software application that allows users to interact with data dynamically."),
-        p("One of the key benefits of interactive apps is that they enable users to explore and analyze data in real time, allowing for a more in-depth understanding of the underlying trends and patterns. With interactive apps, users can filter and sort data based on specific criteria, and then generate custom reports or visualizations that highlight the most important insights."),
-        br(),
         p(tags$em(tags$strong("Table of Contents:"))),
 
         # Table of Content
