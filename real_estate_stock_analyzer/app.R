@@ -88,15 +88,15 @@ sidebar <- dashboardSidebar(#expandOnHover = FALSE,
 body <- dashboardBody(tabItems(
 
   #### Intro Tab ####
-  tabItem(tabName = "intro",
-          fluidPage(
-            p(h4("Welcome to the", pink_words("Real Estate Stocks Analyzer"), " app.")),
-            p(h4("This app enables users to analyze Brazilian real estate stocks and manage their stock portfolio. Use the sidebar to interact with the app, define your analysis preferences, and select the stock you want to analyze.")),
-            p(h4("The app utilizes popular R packages like", pink_words("shiny"),", ", pink_words("bs4Dash"), ", ", pink_words("plotly"), ",", pink_words("yahoofinancer"), ".")),
-            created_by_msg(),
-            p(h4("Visit the website ", pink_words("apps.hodatascience.com.br", link = "https://apps.hodatascience.com.br/") , "for more similar apps and to learn more about the app creator.")),
-            br(),
-          )),
+  # tabItem(tabName = "intro",
+  #         fluidPage(
+  #           p(h4("Welcome to the", pink_words("Real Estate Stocks Analyzer"), " app.")),
+  #           p(h4("This app enables users to analyze Brazilian real estate stocks and manage their stock portfolio. Use the sidebar to interact with the app, define your analysis preferences, and select the stock you want to analyze.")),
+  #           p(h4("The app utilizes popular R packages like", pink_words("shiny"),", ", pink_words("bs4Dash"), ", ", pink_words("plotly"), ",", pink_words("yahoofinancer"), ".")),
+  #           created_by_msg(),
+  #           p(h4("Visit the website ", pink_words("apps.hodatascience.com.br", link = "https://apps.hodatascience.com.br/") , "for more similar apps and to learn more about the app creator.")),
+  #           br(),
+  #         )),
 
   #### Stocks Analysis Tab####
   tabItem(tabName = "stocks_analysis",
