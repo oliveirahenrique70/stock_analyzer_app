@@ -55,9 +55,9 @@ sidebar <- dashboardSidebar(#expandOnHover = FALSE,
   minified = FALSE,
   
   sidebarMenu(
-    menuItem("Intro",
-             tabName = "intro",
-             icon = icon("cog")),
+#    menuItem("Intro",
+#             tabName = "intro",
+#             icon = icon("cog")),
     menuItem("Stock Plot",
              tabName = "stocks_analysis",
              icon = icon("chart-line")),
