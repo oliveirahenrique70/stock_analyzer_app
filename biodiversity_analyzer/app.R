@@ -16,7 +16,7 @@ library(tidyverse)
 source("app_functions_and_vectors.R")
 
 # Read data
-df <- read_csv("www/bio_poland.csv")
+df <- read_csv("www/bio_poland_head.csv")
 
 # Data pre-processing
 df <- refine_df(df)
