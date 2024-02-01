@@ -43,7 +43,7 @@ ui <- navbarPage(
       # First section - Data Potency
       section_title("Get the Full Potency of your Data", line_position = "up"),
       br(),
-      p("Welcome to the", pink_words("HO"), "portfolio webpage! 🧑‍💻 As a data scientist, my goal is to help you get the most out of your information. Here's how I can help:"),
+      p("Welcome to the", pink_words("HO"), "portfolio webpage! 🧑‍💻 As a data scientist, I aim to create tools that facilitate data analysis for experts and amateurs. Let's work together and discover the full potential of your data. Here's how I can help:"),
       br(),
       fluidRow(
           column(width = 7,
@@ -60,8 +60,6 @@ ui <- navbarPage(
                  )
       ),
       br(),
-      p("My goal is to create tools that facilitate data analysis for both experts and amateur users. Let's work together to get the full potential of your data."),
-      #br(),
 
       # Fourth section - Created by
       created_by_msg(),
