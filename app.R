@@ -178,16 +178,16 @@ ui <- navbarPage(
         p(tags$em(tags$strong("Table of Contents:"))),
 
         # Table of Content
-        bullet_point_toc("Pooling Data Analysis", "#pooling_data_analysis"),
+        bullet_point_toc("Russo-Ukrainian War Analysis", "#russo_ukrainian_analysis"),
         bullet_point_toc("Solar Panels ROI Analysis", "#solar_panels_roi_analysis"),
         bullet_point_toc("Books Text Analysis", "#books_text_analysis"),
 
         # First Report
-        section_subtitle("Pooling Data Analysis", small = "created in July 2020", id = "pooling_data_analysis"),
+        section_subtitle("Russo-Ukrainian War Analysis", small = "created in February 2024", id = "russo_ukrainian_analysis"),
         p("This report analyzes a polling dataset that includes information on two election candidates, their images, ballot results and voters' demographics data."),
         packages_bagde(c("tidyverse", "rmarkdown", "plotly", "kableExtra")),
-        img_with_link("ds_polling_data_analysis.webp", "Polling_Data_Analisys", rpubs = TRUE),
-        ds_report_link("Polling_Data_Analisys"),
+        img_with_link("russia_ucraine_war_repo.webp", "russo-ukrainian-war-analysis", rpubs = TRUE),
+        ds_report_link("russo-ukrainian-war-analysis"),
 
         # Second Report
         section_subtitle("Solar Panels ROI Analysis", small = "created in October 2022", id = "solar_panels_roi_analysis"),
