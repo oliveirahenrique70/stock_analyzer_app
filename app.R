@@ -185,9 +185,9 @@ ui <- navbarPage(
         # First Report
         section_subtitle("Russo-Ukrainian War Analysis", small = "created in February 2024", id = "russo_ukrainian_analysis"),
         p("One of the most significant geopolitical crises of the twenty-first century is the war between Russia and Ukraine. This project uses data analysis to learn more about the state of the conflict."),
-        packages_bagde(c("tidyverse", "rmarkdown", "plotly", "kableExtra")),
-        img_with_link("russia_ucraine_war_repo.webp", "russo-ukrainian-war-analysis", rpubs = TRUE),
-        ds_report_link("russo-ukrainian-war-analysis"),
+        packages_bagde(c("tidyverse", "quarto", "plotly", "kableExtra", "bslib")),
+        img_with_link("russia_ucraine_war_repo.webp", "Russo-Ukrainian-war-analysis", rpubs = TRUE),
+        ds_report_link("Russo-Ukrainian-war-analysis"),
 
         # Second Report
         section_subtitle("Solar Panels ROI Analysis", small = "created in October 2022", id = "solar_panels_roi_analysis"),
