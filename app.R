@@ -184,7 +184,7 @@ ui <- navbarPage(
 
         # First Report
         section_subtitle("Russo-Ukrainian War Analysis", small = "created in February 2024", id = "russo_ukrainian_analysis"),
-        p("This report analyzes a polling dataset that includes information on two election candidates, their images, ballot results and voters' demographics data."),
+        p("One of the most significant geopolitical crises of the twenty-first century is the war between Russia and Ukraine. This project uses data analysis to learn more about the state of the conflict."),
         packages_bagde(c("tidyverse", "rmarkdown", "plotly", "kableExtra")),
         img_with_link("russia_ucraine_war_repo.webp", "russo-ukrainian-war-analysis", rpubs = TRUE),
         ds_report_link("russo-ukrainian-war-analysis"),
