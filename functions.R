@@ -93,7 +93,7 @@ HO_logo <- function() {
     class = "jumbotron",
     column(1, offset = 4, img(src = "HO.gif", width = 100, style = "padding-top: 12px;")),
     column(4, h2("Henrique Oliveira"),
-           p("MAKING DATA ACCESSIBLE",
+           p("DATA SCIENTIST & ENGINEER",
              align = "center",
              style = "color: #FF50CA; font-size: 23px; font-family: 'Lucida Console'"))
   )
