@@ -49,7 +49,8 @@ ui <- navbarPage(
           column(width = 7,
                  p(bullet_point(), "Manipulate large", pink_words("data"), ", create ", pink_words("data visualization"), " and ", pink_words("machine learning models"), "."),
                  p(bullet_point(), "Develop intuitive and captivating ", pink_words("data science reports"), "."),
-                 p(bullet_point(), "Build ", pink_words("interactive apps"), " that enable real-time exploration of your data.")
+                 p(bullet_point(), "Build ", pink_words("interactive apps"), " that enable real-time exploration of your data."),
+                 p(bullet_point(), "Manage a project from the beginning through every stage of development until", pink_words("deployment"))
                  ),
           column(width = 5,
                  align = "center",
